@@ -1,0 +1,2 @@
+class PartyCharacter < ApplicationRecord
+end

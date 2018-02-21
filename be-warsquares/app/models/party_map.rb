@@ -1,0 +1,2 @@
+class PartyMap < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class PartyCharacterController < ApplicationController
+end

@@ -1,0 +1,2 @@
+class PartyMapController < ApplicationController
+end
