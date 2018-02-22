@@ -4,35 +4,36 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import Party from './Party.js'
 import Login from './Login.js'
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import { logIn } from './actions'
 
 
 class App extends Component {
 
   componentWillMount() {
+    console.log("willmount: ", this.props.auth)
     if (localStorage.getItem('jwt')) {
       AuthAdapter.current_user()
         .then(user => {
           if (!user.error) {
-            console.log("fetch user")
-            this.setState({
-              auth: {
-                isLoggedIn: true,
-                user: user
-              }
-            })
+            console.log("Fetching User...", this.props)
+            this.props.logIn(user)
           }
         })
     }
   }
 
+
   render() {
     return (
       <div className="App">
         <Switch>
-          <Route exact path='/' render={() => {
-              return this.props.auth.isLoggedIn ? <Party /> : <Redirect to="/login" />
-          }} />
-          <Route exact path='/login' component={Login} />
+          <Route exact path='/battlefield' component={Party} />
+          <Route exact path='/store' component={Party} />
+          <Route exact path='/login' component={Party} />
+          <Route exact path='/party' component={Party} />
+          <Route exact path='/' component={Login} />
+          <Route path="*" component={FourOhFour}
         </Switch>
       </div>
     );
@@ -41,7 +42,7 @@ class App extends Component {
 
 
 const mapStateToProps = (state) => {
-  console.log(state)
+  console.log("map state: ", state)
   return {
     auth: {
       isLoggedIn: state.auth.isLoggedIn,
@@ -50,4 +51,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    logIn: logIn
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
