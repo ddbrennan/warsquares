@@ -1,39 +1,52 @@
 import React, { Component } from 'react';
 import AuthAdapter from './api/AuthAdapter'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import Party from './Party.js'
-import Login from './Login.js'
-import { connect } from 'react-redux';
+import Party from './components/Party.js'
+import Login from './components/Login.js'
+import Store from './components/Store.js'
+import Home from './components/Home.js'
+import SignUp from './components/SignUp.js'
+import Battlefield from './components/Battlefield.js'
+import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { logIn } from './actions'
+import { logIn, logOut } from './actions'
+import { withRouter } from "react-router-dom"
+import { Link } from 'react-router-dom'
+
+
 
 
 class App extends Component {
 
   componentWillMount() {
-    console.log("willmount: ", this.props.auth)
     if (localStorage.getItem('jwt')) {
       AuthAdapter.current_user()
         .then(user => {
           if (!user.error) {
-            console.log("Fetching User...", this.props)
             this.props.logIn(user)
           }
         })
     }
   }
 
+  logout = () => {
+    localStorage.removeItem('jwt')
+    this.props.logOut()
+  }
+
 
   render() {
     return (
       <div className="App">
+        {this.props.auth.isLoggedIn ? <button onClick={this.logout}>Logout</button> : null }
+        <Link to="/home">Home</Link>
         <Switch>
-          <Route exact path='/battlefield' component={Party} />
-          <Route exact path='/store' component={Party} />
-          <Route exact path='/login' component={Party} />
+          <Route exact path='/battlefield' component={Battlefield} />
+          <Route exact path='/store' component={Store} />
+          <Route exact path='/login' component={Login} />
+          <Route exact path='/signup' component={SignUp} />
           <Route exact path='/party' component={Party} />
-          <Route exact path='/' component={Login} />
-          <Route path="*" component={FourOhFour}
+          <Route path="*" component={Home} />
         </Switch>
       </div>
     );
@@ -42,7 +55,6 @@ class App extends Component {
 
 
 const mapStateToProps = (state) => {
-  console.log("map state: ", state)
   return {
     auth: {
       isLoggedIn: state.auth.isLoggedIn,
@@ -53,8 +65,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    logIn: logIn
+    logIn: logIn,
+    logOut: logOut
   }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

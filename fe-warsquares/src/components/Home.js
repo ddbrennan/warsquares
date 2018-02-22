@@ -1,0 +1,35 @@
+import React from "react";
+import { Link } from 'react-router-dom'
+import { Route, Redirect } from 'react-router'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
+class Home extends React.Component {
+
+  render() {
+    return (
+      <div>
+        { !this.props.auth.isLoggedIn ?
+          <div>
+            <div>Home</div>
+            <Link to="/login">Sign In</Link>
+            <Link to="/signup">Sign Up</Link>
+          </div>
+        :
+          <Redirect to="/party" />
+        }
+      </div>
+    )
+  }
+ }
+
+ const mapStateToProps = (state) => {
+   return {
+     auth: {
+       isLoggedIn: state.auth.isLoggedIn,
+       user: state.auth.user
+     }
+   }
+ }
+
+export default connect(mapStateToProps)(Home)
