@@ -1,13 +1,17 @@
 import React from "react";
 import { Link } from 'react-router-dom'
-import { Route, Redirect } from 'react-router'
+import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 class Store extends React.Component {
 
+  // lists all items w/ prices
+  // removes ones that are owned already
+
+  //purchase an item to add it to inventory
+
   render() {
-    console.log(this.props)
     return (
       <div>
         { this.props.auth.isLoggedIn ?

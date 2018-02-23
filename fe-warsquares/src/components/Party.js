@@ -1,11 +1,39 @@
 import React from "react"
 import { Link } from 'react-router-dom'
-import { Route, Redirect } from 'react-router'
+import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import PartyAdapter from "../api/PartyAdapter"
+
 
 
 class Party extends React.Component {
+
+  componentDidMount = () => {
+    PartyAdapter.getUserParty(this.props.auth.user)
+      .then(console.log)
+  }
+
+  // fetch the party
+  //  if there isn't one, create character
+  //  delete part button?
+  // should know members, equipment, gold and current map
+
+  //create character
+  // pick a class
+  // choose colors
+
+  //party members
+  // name
+  // class, colors
+  // stats
+  // equipment
+
+  // inventory
+  //  all items you own that aren't equipped
+  // gold
+
+
 
   render() {
     return (

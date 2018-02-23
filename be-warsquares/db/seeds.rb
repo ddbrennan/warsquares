@@ -5,3 +5,4 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+Equipment.create(name: "Sword of Stabbin'", amount: 300, bonus: "Deal an extra damage every round")

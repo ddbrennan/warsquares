@@ -1,3 +1,3 @@
 class Equipment < ApplicationRecord
-  belongs_to :party_character
+  has_many :party_equipments
 end

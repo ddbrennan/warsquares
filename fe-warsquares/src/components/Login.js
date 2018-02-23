@@ -1,6 +1,6 @@
 import React from "react";
 import AuthAdapter from '../api/AuthAdapter'
-import { Route, Redirect } from 'react-router'
+import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { logIn, logOut } from '../actions'
@@ -21,7 +21,7 @@ class Login extends React.Component {
     })
       .then(user => {
         if (!user.error) {
-          this.props.logIn(this.state)
+          this.props.logIn(user)
           localStorage.setItem('jwt', user.jwt)
         }
       })

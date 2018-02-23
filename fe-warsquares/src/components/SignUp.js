@@ -8,6 +8,8 @@ class SignUp extends React.Component {
     passwordConfirm: ""
   }
 
+  //should login after submit
+
   handleFormChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value

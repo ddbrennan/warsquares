@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AuthAdapter from './api/AuthAdapter'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import Party from './components/Party.js'
 import Login from './components/Login.js'
 import Store from './components/Store.js'

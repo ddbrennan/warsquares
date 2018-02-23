@@ -12,7 +12,7 @@ class AuthController < ApplicationController
     user = User.find_by(username: params[:username])
     if user.present? && user.authenticate(params[:password])
       created_jwt = issue_token({id: user.id})
-      render json: {username: user.username, jwt: created_jwt}
+      render json: {username: user.username, id: user.id, jwt: created_jwt}
     else
       render json: {
         error: 'Username or password incorrect'

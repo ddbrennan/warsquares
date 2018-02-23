@@ -1,0 +1,2 @@
+class PartyEquipmentsController < ApplicationController
+end
