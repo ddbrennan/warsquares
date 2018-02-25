@@ -4,6 +4,8 @@ import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PartyAdapter from "../api/PartyAdapter"
+import { importParty } from '../actions'
+import Character from './Character'
 
 
 
@@ -11,7 +13,7 @@ class Party extends React.Component {
 
   componentDidMount = () => {
     PartyAdapter.getUserParty(this.props.auth.user)
-      .then(console.log)
+      .then(this.props.importParty)
   }
 
   // fetch the party
@@ -33,6 +35,12 @@ class Party extends React.Component {
   //  all items you own that aren't equipped
   // gold
 
+  mapMembers = () => {
+    if (this.props.party.members) {
+      return this.props.party.members.map(m => <Character key={m.id} character={m} />)
+    }
+  }
+
 
 
   render() {
@@ -44,29 +52,8 @@ class Party extends React.Component {
             <Link to="/battlefield">Battle</Link>
             <Link to="/store">Store</Link>
 
-            <div>
-              <h3>Character 1</h3>
-              <p>Stats</p>
-              <div>Item</div>
-            </div>
-
-            <div>
-              <h3>Character 2</h3>
-              <p>Stats</p>
-              <div>Item</div>
-            </div>
-
-            <div>
-              <h3>Character 3</h3>
-              <p>Stats</p>
-              <div>Item</div>
-            </div>
-
-            <div>
-              <h3>Character 4</h3>
-              <p>Stats</p>
-              <div>Item</div>
-            </div>
+            <h1>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
+            {this.mapMembers()}
           </div>
         :
           <Redirect to="/home"/>
@@ -81,8 +68,19 @@ class Party extends React.Component {
      auth: {
        isLoggedIn: state.auth.isLoggedIn,
        user: state.auth.user
+     },
+     party: {
+       name: state.party.party.name,
+       members: state.party.party.members,
+       equipment: state.party.party.equipment
      }
    }
  }
 
-export default connect(mapStateToProps)(Party)
+ const mapDispatchToProps = (dispatch) => {
+   return bindActionCreators({
+     importParty: importParty
+   }, dispatch)
+ }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Party)

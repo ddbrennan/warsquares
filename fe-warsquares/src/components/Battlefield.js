@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import GridMap from './GridMap'
+import Encounter from './Encounter'
 
 class Battlefield extends React.Component {
 
@@ -10,12 +12,6 @@ class Battlefield extends React.Component {
   //  string [TYPE][NUMBER OF ENEMIES][VISITED] eg: M91F20
   //  first square is always F01
   // or load old one
-
-  //enter square
-  // list of ENEMIES
-  // bribe - function of # of enemies, type
-  // battle - see below
-  // recruit - if you have the tabard && dice roll
 
   //battle
   //  roll 6 dice per character, freeze some
@@ -28,6 +24,8 @@ class Battlefield extends React.Component {
   //  rogue - roll again
   //  mage - deal damage by energy
 
+
+  // Display Player Character Large Element
   render() {
     return (
       <div>
@@ -36,6 +34,10 @@ class Battlefield extends React.Component {
             <div>Battlefield</div>
             <Link to="/party">Party</Link>
             <Link to="/store">Store</Link>
+
+
+          { this.props.encounter && <Encounter />}
+          <GridMap map={this.props.map} />
           </div>
         :
           <Redirect to="/home" />
@@ -50,7 +52,9 @@ class Battlefield extends React.Component {
      auth: {
        isLoggedIn: state.auth.isLoggedIn,
        user: state.auth.user
-     }
+     },
+     map: state.party.map,
+     encounter: state.gameLogic.encounter
    }
  }
 

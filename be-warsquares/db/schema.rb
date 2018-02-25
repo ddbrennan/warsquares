@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20180223150153) do
   enable_extension "plpgsql"
 
   create_table "characters", force: :cascade do |t|
-    t.string "class"
+    t.string "role"
     t.integer "health"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20180223150153) do
 
   create_table "parties", force: :cascade do |t|
     t.string "name"
+    t.integer "gold"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -68,6 +69,7 @@ ActiveRecord::Schema.define(version: 20180223150153) do
   create_table "party_maps", force: :cascade do |t|
     t.bigint "party_id"
     t.bigint "map_id"
+    t.string "visited"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["map_id"], name: "index_party_maps_on_map_id"

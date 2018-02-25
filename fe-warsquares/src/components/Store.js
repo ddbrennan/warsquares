@@ -3,13 +3,23 @@ import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import Equipment from './Equipment'
 
 class Store extends React.Component {
 
-  // lists all items w/ prices
-  // removes ones that are owned already
+  checkOwnership = (item) => {
+    return!!this.props.equipment.owned.find(e => {
+      return e.equipment_id === item.id
+    })
+  }
 
-  //purchase an item to add it to inventory
+  displayEquipment = () => {
+
+    return this.props.equipment.all.map(e => <Equipment
+                                                owned={this.checkOwnership(e)}
+                                                key={e.id}
+                                                equipment={e} />)
+  }
 
   render() {
     return (
@@ -19,6 +29,9 @@ class Store extends React.Component {
             <div>Store</div>
             <Link to="/party">Party</Link>
             <Link to="/battlefield">Battlefield</Link>
+
+            <h3>Available gold: {this.props.gold}</h3>
+            { this.displayEquipment() }
           </div>
         :
           <Redirect to="/home" />
@@ -29,11 +42,17 @@ class Store extends React.Component {
  }
 
  const mapStateToProps = (state) => {
+   console.log(state)
    return {
      auth: {
        isLoggedIn: state.auth.isLoggedIn,
        user: state.auth.user
-     }
+     },
+     equipment: {
+       owned: state.party.party.equipment,
+       all: state.party.equipment
+     },
+     gold: state.party.gold
    }
  }
 
