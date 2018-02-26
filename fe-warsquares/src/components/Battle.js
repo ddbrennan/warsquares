@@ -12,29 +12,87 @@ class Battle extends React.Component {
       pc: [],
       npc: [],
       all: []
-    }
+    },
+    rolling: false
   }
 
-  componentDidMount = () => {
-    this.setState({
-      combatants: {
-        pc: [{color: "red", armorColor: "red", health: 20, role: "Knight", equipment: [], mana: 0, name: ""}],
-        npc: [],
-        all: []
+  getPCList = () => {
+
+    return this.props.party.members.map(m => {
+      let role = this.props.party.characters.find(c => c.id === m.character_id)
+
+      let charObj = {
+        mana: 0,
+        armorColor: m.armor_color,
+        color: m.color,
+        role: role.role,
+        health: role.health,
+        equipment: [], //should find equipment with holder_id
+        name: m.name
       }
+
+      return charObj
     })
   }
 
-  //"battlers" array - alternates between both teams
-  //display all characters w/ hearts
+  getNPCList = () => {
+    return this.props.gameLogic.enemyArr.map(e => {
+      let role = this.props.party.characters.find(c => c.role === e)
+
+      let charObj = {
+        mana: 0,
+        armorColor: "red",
+        color: "pale",
+        role: e,
+        health: role.health,
+        equipment: [],
+        name: "Mr Oinkles"
+      }
+
+      return charObj
+    })
+  }
+
+  getAllList = () => {
+    const enemies = this.props.gameLogic.enemyArr
+    const allies = this.props.party.members
+    let cap = Math.max(enemies.length, allies.length)
+    let allList = []
+
+    for (let i = 0; i < cap; i++) {
+      if (allies[i]) {
+        allList.push("p" + i)
+      }
+      if (enemies[i]) {
+        allList.push("n" + i)
+      }
+    }
+
+    return allList
+  }
+
+  componentDidMount = () => {
+
+    this.setState({
+      combatants: {
+        pc: this.getPCList(),
+        npc: this.getNPCList(),
+        all: this.getAllList()
+      }
+    })
+
+  }
+
   pcAlive = () => {
     return !!this.state.combatants.pc.find(char => {
-      char.health <= 0
+      return char.health > 0
     })
   }
 
   npcAlive = () => {
-    return false
+    return !!this.state.combatants.npc.find(char => {
+      return char.health > 0
+    })
   }
 
   //TAKE TURNS
@@ -54,9 +112,51 @@ class Battle extends React.Component {
 
   //TURN
   takeTurn = (combatant) => {
+    if (combatant[0] === "p") {
+      this.takeUserTurn(combatant[1])
+    } else {
+      this.takeNPCTurn(combatant[1])
+    }
+  }
+
+  takeUserTurn = (num) => {
+    // get character
+    let char = this.state.combatants.pc[num]
+
+    // check if alive
+    if (char.health > 0) {
+      // highlight character
+      this.setState({
+        rolling: true
+      })
+      // if so call up dice
+      // roll twice
+      //get equipment bonuses
+      this.state.rolls
+      // calculate damage
+      // calculate healing
+      // calculate mana
+      // cast spells
+    }
+
+    //pass turn
+  }
+
+  takeNPCTurn = (num) => {
+
+    let char = this.state.combatants.npc[num]
+
+    if (char.health > 0) {
+      // highlight character
+      // all damage unless life is < 50% in which case heal 1-3 and rest damage
+      // damage as appropriate
+      // damage aims at knight then the lowest HP
+    }
+
+    // pass turn
+    this.state.combatants.npc[num].health = 0
 
   }
-  //highlight current one
 
   rollDice = (rolls = 6) => {
     let arr = []
@@ -91,21 +191,6 @@ class Battle extends React.Component {
       }
     })
   }
-
-
-
-  //deal damage/heal
-  //check if character died, if they did remove from respective arrays
-  //use energy
-  //check if character died, if they did remove from respective arrays
-  //pass turn
-
-  //npc turn
-  // all damage unless life is < 50% in which case heal 1-3 and rest damage
-  // damage as appropriate
-  // damage aims at knight then the lowest HP
-  //pass turn
-
   //ALL CHARACTER ON ONE SIDE DEAD
   resolveBattle = () => {
 
@@ -133,8 +218,15 @@ class Battle extends React.Component {
       <div>
         {this.renderParty()}
         {this.renderEnemies()}
-        <button onClick={this.setDiceRoll}>Roll</button>
-        {this.displayDiceRoll()}
+        {this.state.rolling ?
+          <div>
+            <button onClick={this.setDiceRoll}>Roll</button>
+            {this.displayDiceRoll()}
+          </div>
+          :
+          null
+        }
+        <button onClick={this.takeTurns}>Start Battle</button>
       </div>
     )
   }
@@ -144,7 +236,9 @@ class Battle extends React.Component {
    return {
      party: {
        members: state.party.party.members,
-       characters: state.party.characters
+       characters: state.party.characters,
+       equipment: state.party.party.equipment,
+       allEquipment: state.party.equipment
      },
      gameLogic: {
        enemyArr: state.gameLogic.enemyArr

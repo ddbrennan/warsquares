@@ -13,8 +13,8 @@ class GridMap extends React.Component {
     let arr = []
     let key = 0
     let tiles = this.props.map.layout.match(/.{2}/g)
-    for (let i=0; i<this.state.width; i++) {
-      for (let j=0; j<this.state.width; j++) {
+    for (let i=0; i < this.state.width; i++) {
+      for (let j=0; j < this.state.width; j++) {
         arr.push(<Square
                     x={j}
                     y={i}

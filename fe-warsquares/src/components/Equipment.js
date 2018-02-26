@@ -7,6 +7,7 @@ class Equipment extends React.Component {
     //check if owned
     //check if you have enough gold
     //if all ok then add to inventory
+    //if tabard then update that
   }
 
   render() {

@@ -6,24 +6,18 @@ import { bindActionCreators } from 'redux'
 import PartyAdapter from "../api/PartyAdapter"
 import { importParty } from '../actions'
 import Character from './Character'
+import CreateCharacter from './CreateCharacter'
 
 
 
 class Party extends React.Component {
 
   componentDidMount = () => {
-    PartyAdapter.getUserParty(this.props.auth.user)
-      .then(this.props.importParty)
+    if (!this.props.party.name) {
+      PartyAdapter.getUserParty(this.props.auth.user)
+        .then(this.props.importParty)
+    }
   }
-
-  // fetch the party
-  //  if there isn't one, create character
-  //  delete part button?
-  // should know members, equipment, gold and current map
-
-  //create character
-  // pick a class
-  // choose colors
 
   //party members
   // name
@@ -31,11 +25,26 @@ class Party extends React.Component {
   // stats
   // equipment
 
-  // inventory
+  // INVENTORY
+
+  //allow equipping
+
   //  all items you own that aren't equipped
+
   // gold
 
-  //EMBARK ON JOURNEY
+
+  //LIST OF MAPS
+
+  // Active Map
+
+  // Incomplete Maps
+
+  // Completed Maps (move count)
+
+  // Delete Map From List
+
+  //GENERATE NEW MAP
   embark = (e) => {
 
     const tiles = ["F", "M", "S", "W"]
@@ -69,14 +78,17 @@ class Party extends React.Component {
     console.log(mapLayout)
   }
 
-  // get map from DB
-
 
   mapMembers = () => {
     if (this.props.party.members) {
       return this.props.party.members.map(m => <Character key={m.id} character={m} />)
     }
   }
+
+  deleteParty = () => {
+    //send request to backend to delete party
+  }
+
 
 
   render() {
@@ -92,6 +104,12 @@ class Party extends React.Component {
 
             <h1>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
             {this.mapMembers()}
+
+            { this.props.party.name ?
+              <button onClick={this.deleteParty}>Delete Party</button>
+              :
+              <CreateCharacter />
+            }
           </div>
         :
           <Redirect to="/home"/>
