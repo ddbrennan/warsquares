@@ -6,6 +6,7 @@ export default (state = {
   enemyArr: []
 }, action) => {
   switch(action.type) {
+    
     case 'SELECT_SQUARE':
       let newX = state.selectedSquare[0] + action.change.x
       let newY = state.selectedSquare[1] + action.change.y
@@ -14,10 +15,13 @@ export default (state = {
         (newY >= 0 && newY < action.change.width) ? newY : state.selectedSquare[1]
       ]
       return {...state, selectedSquare: newSelection }
+
     case 'START_ENCOUNTER':
       return {...state, encounter: true, enemies: action.tile}
+
     case 'SET_ENEMIES':
       return {...state, enemyArr: action.enemyArr }
+
     default:
       return state
   }

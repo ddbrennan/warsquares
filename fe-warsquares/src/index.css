@@ -67,3 +67,22 @@ body {
 .castle {
   background-image: url('./images/castle.jpeg');
 }
+
+.new-char-avatar {
+  width: 30%;
+}
+
+.big-corner-char {
+  transform: scaleX(-1);
+  width: 100%;
+}
+
+.corner-char-box {
+  width: 35%;
+  height: 40vh;
+  position: absolute;
+  bottom: 0;
+  left: -2%;
+  overflow: hidden;
+
+}

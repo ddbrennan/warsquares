@@ -5,27 +5,10 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import GridMap from './GridMap'
 import Encounter from './Encounter'
+import Character from './Character'
 
 class Battlefield extends React.Component {
 
-  // randomly generate a map if there isn't one or if it's been completed
-  //  string [TYPE][NUMBER OF ENEMIES][VISITED] eg: M91F20
-  //  first square is always F01
-  // or load old one
-
-  //battle
-  //  roll 6 dice per character, freeze some
-  // heart - heal
-  // sword - deal 1 damage
-  // bolt - gain 1 energy
-  // after roll use ability -
-  //  cleric - send 1 heart to another party member
-  //  warrior - turn an energy into damage
-  //  rogue - roll again
-  //  mage - deal damage by energy
-
-
-  // Display Player Character Large Element
   render() {
     return (
       <div>
@@ -38,6 +21,11 @@ class Battlefield extends React.Component {
 
           { this.props.encounter && <Encounter />}
           <GridMap map={this.props.map} />
+            <div className="corner-char-box">
+              <div className="big-corner-char">
+                <Character character={this.props.character} />
+              </div>
+            </div>
           </div>
         :
           <Redirect to="/home" />
@@ -47,14 +35,25 @@ class Battlefield extends React.Component {
   }
  }
 
+
  const mapStateToProps = (state) => {
+   let character = {}
+   if (state.party.party.members) {
+     character = {
+       ...state.party.party.members[0],
+       armorColor: state.party.party.members[0].armor_color,
+       role: state.party.characters.find(c => c.id === state.party.party.members[0].character_id).role
+     }
+   }
+
    return {
      auth: {
        isLoggedIn: state.auth.isLoggedIn,
        user: state.auth.user
      },
      map: state.party.map,
-     encounter: state.gameLogic.encounter
+     encounter: state.gameLogic.encounter,
+     character: character
    }
  }
 

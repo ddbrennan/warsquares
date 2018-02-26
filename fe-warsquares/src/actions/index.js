@@ -21,3 +21,7 @@ export function startEncounter(tile) {
 export function setEnemies(enemyArr) {
   return { type: 'SET_ENEMIES', enemyArr: enemyArr }
 }
+
+export function purchaseItem(item) {
+  return { type: 'PURCHASE_ITEM', item: item}
+}

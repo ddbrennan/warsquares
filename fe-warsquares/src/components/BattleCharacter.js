@@ -8,5 +8,6 @@ class BattleCharacter extends React.Component {
       <div>{this.props.role.role}</div>
     )
   }
- }
+}
+
 export default BattleCharacter

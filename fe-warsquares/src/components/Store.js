@@ -7,16 +7,9 @@ import Equipment from './Equipment'
 
 class Store extends React.Component {
 
-  checkOwnership = (item) => {
-    return!!this.props.equipment.owned.find(e => {
-      return e.equipment_id === item.id
-    })
-  }
-
   displayEquipment = () => {
 
     return this.props.equipment.all.map(e => <Equipment
-                                                owned={this.checkOwnership(e)}
                                                 key={e.id}
                                                 equipment={e} />)
   }
