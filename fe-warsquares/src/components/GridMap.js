@@ -34,6 +34,7 @@ class GridMap extends React.Component {
     window.removeEventListener("keydown", this.handleKeyPress)
   }
 
+  //Should move in correct direction
   handleKeyPress = (e) => {
     switch(e.which) {
       case 87:
@@ -55,16 +56,18 @@ class GridMap extends React.Component {
   }
 
   movePiece = (xChange, yChange) => {
-    if (!this.props.battling) {
+    if (!this.props.encounter) {
       this.props.selectSquare(xChange, yChange, this.state.width)
     }
   }
 
   render() {
     return (
-      <div className="grid-box"
-           style={{"width": this.state.width * 150, "height": this.state.width * 150}}>
-        { this.makeSquares() }
+      <div className="map-container">
+        <div className="grid-box"
+             style={{"width": this.state.width * 150, "height": this.state.width * 150}}>
+          { this.makeSquares() }
+        </div>
       </div>
     )
   }
@@ -78,7 +81,7 @@ class GridMap extends React.Component {
 
  const mapStateToProps = (state) => {
    return {
-     battling: state.gameLogic.battling
+     encounter: state.gameLogic.encounter
    }
  }
 

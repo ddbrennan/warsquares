@@ -2,7 +2,8 @@ export default (state = {
   selectedSquare: [0,0],
   encounter: false,
   enemies: "",
-  hasTabard: false
+  hasTabard: false,
+  enemyArr: []
 }, action) => {
   switch(action.type) {
     case 'SELECT_SQUARE':
@@ -15,6 +16,8 @@ export default (state = {
       return {...state, selectedSquare: newSelection }
     case 'START_ENCOUNTER':
       return {...state, encounter: true, enemies: action.tile}
+    case 'SET_ENEMIES':
+      return {...state, enemyArr: action.enemyArr }
     default:
       return state
   }

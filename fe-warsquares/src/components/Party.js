@@ -35,12 +35,48 @@ class Party extends React.Component {
   //  all items you own that aren't equipped
   // gold
 
+  //EMBARK ON JOURNEY
+  embark = (e) => {
+
+    const tiles = ["F", "M", "S", "W"]
+    let width = e.target.value
+    let mapLayout = "F0"
+    let tile = ""
+
+    let castle = Array(((width-1)*width)/2).fill("N")
+    castle[Math.floor(Math.random() * castle.length)] = "C"
+
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < width; y++) {
+
+        let type = tiles[Math.floor(Math.random() * 4)]
+        let num = Math.floor(Math.random() * 3)
+
+        if (x+y < width && x+y > 0) {
+          num += 3
+        } else if (x+y > 0){
+          num += 6
+          if (castle.pop() === "C") {
+            type = "C"
+            num = 9
+          }
+        }
+
+        mapLayout += (type + num)
+      }
+    }
+
+    console.log(mapLayout)
+  }
+
+  // get map from DB
+
+
   mapMembers = () => {
     if (this.props.party.members) {
       return this.props.party.members.map(m => <Character key={m.id} character={m} />)
     }
   }
-
 
 
   render() {
@@ -51,6 +87,8 @@ class Party extends React.Component {
 
             <Link to="/battlefield">Battle</Link>
             <Link to="/store">Store</Link>
+
+            <input type="number" placeholder="Width of Map" onChange={this.embark}></input>
 
             <h1>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
             {this.mapMembers()}

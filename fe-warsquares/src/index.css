@@ -32,9 +32,18 @@ body {
   transform: rotateX(0deg) rotateY(0deg) rotateZ(135deg);
 }
 
+.map-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
 .grid-box {
-  position: relative;
-  margin: 40px auto 0;
   transform: rotateX(60deg) rotateY(0deg) rotateZ(-135deg);
 }
 

@@ -17,3 +17,7 @@ export function selectSquare(x,y,width) {
 export function startEncounter(tile) {
   return { type: 'START_ENCOUNTER', tile: tile }
 }
+
+export function setEnemies(enemyArr) {
+  return { type: 'SET_ENEMIES', enemyArr: enemyArr }
+}

@@ -4,6 +4,8 @@ class PartyMaps < ActiveRecord::Migration[5.1]
       t.belongs_to :party, foreign_key: true
       t.belongs_to :map, foreign_key: true
       t.string :visited
+      t.boolean :complete
+      t.integer :moves
 
       t.timestamps
     end

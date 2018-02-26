@@ -70,6 +70,8 @@ ActiveRecord::Schema.define(version: 20180223150153) do
     t.bigint "party_id"
     t.bigint "map_id"
     t.string "visited"
+    t.boolean "complete"
+    t.integer "moves"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["map_id"], name: "index_party_maps_on_map_id"

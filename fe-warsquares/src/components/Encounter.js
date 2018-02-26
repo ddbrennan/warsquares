@@ -1,10 +1,19 @@
 import React from "react";
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { setEnemies } from '../actions'
+import { Link } from 'react-router-dom'
+import Battle from './Battle'
+
 
 class Encounter extends React.Component {
+  state = {
+    enemyArr: []
+  }
 
   //should calc bribe money
   calculateBribe = () => {
+    // some number times coordinates of the square times number of enemies
     return 100
   }
 
@@ -13,10 +22,8 @@ class Encounter extends React.Component {
     //check if you have enough gold, if yes then resolve the encounter
   }
 
-  fight = () => {
-    console.log("fighting")
-    //enter fight logic
-
+  componentWillMount = () => {
+    this.calculateEnemies()
   }
 
   calculateEnemies = () => {
@@ -37,12 +44,19 @@ class Encounter extends React.Component {
         enemyArr.push('Rogue')
         break;
     }
-    //add more enemies to array based on length
-    return enemyArr
+
+    const enemyTypes = ['Cleric', 'Knight', 'Mage', 'Rogue']
+
+    for (let i=0; i<(num-1); i++) {
+      enemyArr.push(enemyTypes[Math.floor(Math.random() * 4)])
+    }
+
+    this.props.setEnemies(enemyArr)
   }
 
   resolve = () => {
     //changes status back to over, adds member to team
+    //changes selected square to previous square if battle lost
   }
 
   //should only trigger if enemies is > 0
@@ -50,10 +64,10 @@ class Encounter extends React.Component {
     return (
       <div>
         <h2>ENCOUNTER!</h2>
-        <p>It's {this.calculateEnemies().join(", ")}!</p>
+        <p>It's {this.props.enemyArr.join(", ")}!</p>
         <ul>
           <li onClick={this.bribe}>Bribe for {this.calculateBribe()}</li>
-          <li onClick={this.fight}>Fight them!</li>
+          <Link to="/battle">Battle Them!</Link>
           { this.props.tabard && <li>Recruit</li>}
         </ul>
       </div>
@@ -64,8 +78,15 @@ class Encounter extends React.Component {
 const mapStateToProps = (state) => {
   return {
     enemies: state.gameLogic.enemies,
-    tabard: state.gameLogic.hasTabard
+    tabard: state.gameLogic.hasTabard,
+    enemyArr: state.gameLogic.enemyArr
   }
 }
 
-export default connect(mapStateToProps)(Encounter)
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    setEnemies: setEnemies
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Encounter)

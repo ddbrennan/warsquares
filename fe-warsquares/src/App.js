@@ -5,6 +5,7 @@ import Party from './components/Party.js'
 import Login from './components/Login.js'
 import Store from './components/Store.js'
 import Home from './components/Home.js'
+import Battle from './components/Battle.js'
 import SignUp from './components/SignUp.js'
 import Battlefield from './components/Battlefield.js'
 import { connect } from 'react-redux'
@@ -46,6 +47,7 @@ class App extends Component {
           <Route exact path='/login' component={Login} />
           <Route exact path='/signup' component={SignUp} />
           <Route exact path='/party' component={Party} />
+          <Route exact path='/battle' component={Battle} />
           <Route path="*" component={Home} />
         </Switch>
       </div>
