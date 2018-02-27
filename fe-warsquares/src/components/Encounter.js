@@ -4,6 +4,9 @@ import { bindActionCreators } from 'redux'
 import { setEnemies } from '../actions'
 import { Link } from 'react-router-dom'
 import Battle from './Battle'
+import {NAME_ARRAY} from '../resources/names.js'
+import {ARMOR_COLORS} from '../resources/armorcolors.js'
+import {SKIN_TONES} from '../resources/skintones.js'
 
 
 class Encounter extends React.Component {
@@ -26,29 +29,46 @@ class Encounter extends React.Component {
     this.calculateEnemies()
   }
 
+  makeEnemy = (role) => {
+    let name = NAME_ARRAY[Math.floor(Math.random() * NAME_ARRAY.length)]
+    let armorColor = ARMOR_COLORS[Math.floor(Math.random() * ARMOR_COLORS.length)]
+    let color = SKIN_TONES[Math.floor(Math.random() * SKIN_TONES.length)]
+    let health = this.props.characters.find(c => c.role === role).health
+    return {
+      name: name,
+      armor_color: armorColor,
+      color: color,
+      health:health,
+      max_health: health,
+      mana:0,
+      party_id:0,
+      role: role
+    }
+  }
+
   calculateEnemies = () => {
     let terrain = this.props.enemies[0]
     let num = this.props.enemies[1]
     let enemyArr = []
     switch(terrain) {
       case 'M':
-        enemyArr.push('Cleric')
+        enemyArr.push(this.makeEnemy('Cleric'))
         break;
       case 'F':
-        enemyArr.push('Knight')
+        enemyArr.push(this.makeEnemy('Knight'))
         break;
       case 'S':
-        enemyArr.push('Mage')
+        enemyArr.push(this.makeEnemy('Mage'))
         break;
       case 'W':
-        enemyArr.push('Rogue')
+        enemyArr.push(this.makeEnemy('Rogue'))
         break;
     }
 
     const enemyTypes = ['Cleric', 'Knight', 'Mage', 'Rogue']
 
     for (let i=0; i<(num-1); i++) {
-      enemyArr.push(enemyTypes[Math.floor(Math.random() * 4)])
+      enemyArr.push(this.makeEnemy(enemyTypes[Math.floor(Math.random() * 4)]))
     }
 
     this.props.setEnemies(enemyArr)
@@ -59,7 +79,7 @@ class Encounter extends React.Component {
     return (
       <div>
         <h2>ENCOUNTER!</h2>
-        <p>It's {this.props.enemyArr.join(", ")}!</p>
+        {this.props.enemyArr.length ? <p>It's a {this.props.enemyArr[0].role} and {this.props.enemyArr.length - 1} allies!</p> : null}
         <ul>
           <li onClick={this.bribe}>Bribe for {this.calculateBribe()}</li>
           <Link to="/battle">Battle Them!</Link>
@@ -74,7 +94,8 @@ const mapStateToProps = (state) => {
   return {
     enemies: state.gameLogic.enemies,
     tabard: state.gameLogic.hasTabard,
-    enemyArr: state.gameLogic.enemyArr
+    enemyArr: state.gameLogic.enemyArr,
+    characters: state.party.characters
   }
 }
 

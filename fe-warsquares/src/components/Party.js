@@ -12,9 +12,12 @@ import CreateCharacter from './CreateCharacter'
 
 class Party extends React.Component {
 
-  componentDidMount = () => {
-    PartyAdapter.getUserParty(this.props.auth.user)
-      .then(this.props.importParty)
+  componentWillMount = () => {
+    console.log("Attempting to fetch for: ", this.props.auth.user)
+    if (this.props.auth.user) {
+      PartyAdapter.getUserParty(this.props.auth.user)
+        .then(console.log)
+      }
   }
 
   //party members
@@ -84,7 +87,7 @@ class Party extends React.Component {
   }
 
   deleteParty = () => {
-    //send request to backend to delete party
+    PartyAdapter.deleteParty(this.props.party.id)
   }
 
 
@@ -126,7 +129,8 @@ class Party extends React.Component {
      party: {
        name: state.party.party.name,
        members: state.party.party.members,
-       equipment: state.party.party.equipment
+       equipment: state.party.party.equipment,
+       id: state.party.party.id
      }
    }
  }

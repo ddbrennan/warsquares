@@ -1,12 +1,16 @@
 import React from "react";
 import Character from "./Character"
+import PartyAdapter from "../api/PartyAdapter"
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { importParty } from '../actions'
 
 class CreateCharacter extends React.Component {
   state = {
     name: "",
     role: "Knight",
     color: "pale",
-    armorColor: "red"
+    armor_color: "red"
   }
 
   onChange = (e) => {
@@ -15,8 +19,10 @@ class CreateCharacter extends React.Component {
     })
   }
 
-  submitForm = () => {
-
+  submitForm = (e) => {
+    e.preventDefault()
+    PartyAdapter.createParty({member: this.state, name: `${this.props.user.username}'s Party`, user_id: this.props.user.id})
+      .then(this.props.importParty)
   }
 
   render() {
@@ -29,7 +35,7 @@ class CreateCharacter extends React.Component {
                 name: this.state.name,
                 role: this.state.role,
                 color: this.state.color,
-                armorColor: this.state.armorColor
+                armor_color: this.state.armor_color
               }}></Character>
             </div>
           <h2>{`${this.state.name} the ${this.state.role}`}</h2>
@@ -42,7 +48,7 @@ class CreateCharacter extends React.Component {
             <option value="Rogue">Rogue</option>
             <option value="Mage">Mage</option>
           </select>
-          <select name="armorColor" onChange={this.onChange}>
+          <select name="armor_color" onChange={this.onChange}>
             <option value="red">Red</option>
             <option value="blue">Blue</option>
             <option value="green">Green</option>
@@ -60,4 +66,17 @@ class CreateCharacter extends React.Component {
     )
   }
  }
-export default CreateCharacter
+
+ const mapStateToProps = (state) => {
+    return {
+      user: state.auth.user
+    }
+ }
+
+ const mapDispatchToProps = (dispatch) => {
+   return bindActionCreators({
+     importParty: importParty
+   }, dispatch)
+ }
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateCharacter)

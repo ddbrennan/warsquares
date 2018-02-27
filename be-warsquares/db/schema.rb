@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20180223150153) do
     t.string "name"
     t.string "role"
     t.integer "health"
+    t.integer "max_health"
     t.integer "mana", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

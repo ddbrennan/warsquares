@@ -8,6 +8,7 @@ class PartyCharacters < ActiveRecord::Migration[5.1]
       t.string :name
       t.string :role
       t.integer :health
+      t.integer :max_health
       t.integer :mana, default: 0
 
       t.timestamps

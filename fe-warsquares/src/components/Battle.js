@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux'
 import { } from '../actions'
 import BattleCharacter from './BattleCharacter'
 import { earnGold, addPartyMember } from '../actions'
+import PartyAdapter from '../api/PartyAdapter'
+import { Redirect } from 'react-router'
 
 class Battle extends React.Component {
   state = {
@@ -16,60 +18,24 @@ class Battle extends React.Component {
   }
 
   getAllList = () => {
-    const enemies = this.getNPCList()
-    const allies = this.getPCList()
-    let cap = Math.max(enemies.length, allies.length)
-    let allList = []
+    if (this.props.enemies && this.props.allies) {
+      const enemies = this.props.enemies
+      const allies = this.props.allies
+      let cap = Math.max(enemies.length, allies.length)
+      let allList = []
 
-    for (let i = 0; i < cap; i++) {
-      if (allies[i]) {
-        allList.push(allies[i])
+      for (let i = 0; i < cap; i++) {
+        if (allies[i]) {
+          allList.push(allies[i])
+        }
+        if (enemies[i]) {
+          allList.push(enemies[i])
+        }
       }
-      if (enemies[i]) {
-        allList.push(enemies[i])
-      }
+
+      return allList
     }
-
-    return allList
-  }
-
-  getPCList = () => {
-
-    return this.props.party.members.map(m => {
-      let role = this.props.party.characters.find(c => c.id === m.character_id)
-
-      let charObj = {
-        mana: 0,
-        armorColor: m.armor_color,
-        color: m.color,
-        role: role.role,
-        health: role.health,
-        equipment: [], //should find equipment with holder_id
-        name: m.name,
-        pc: true
-      }
-
-      return charObj
-    })
-  }
-
-  getNPCList = () => {
-    return this.props.gameLogic.enemyArr.map(e => {
-      let role = this.props.party.characters.find(c => c.role === e)
-
-      let charObj = {
-        mana: 0,
-        armorColor: "red",
-        color: "pale",
-        role: e,
-        health: role.health,
-        equipment: [],
-        name: "Mr Oinkles",
-        pc: false
-      }
-
-      return charObj
-    })
+    
   }
 
 
@@ -81,13 +47,13 @@ class Battle extends React.Component {
 
   pcAlive = () => {
     return !!this.state.combatants.find(char => {
-      return (char.health > 0 && char.pc)
+      return (char.health > 0 && char.party_id !== 0)
     })
   }
 
   npcAlive = () => {
     return !!this.state.combatants.find(char => {
-      return (char.health > 0 && !char.pc)
+      return (char.health > 0 && char.party_id === 0)
     })
   }
 
@@ -102,7 +68,7 @@ class Battle extends React.Component {
 
   //TURN
   takeTurn = (combatant) => {
-    if (combatant.pc) {
+    if (combatant.party_id !== 0) {
       this.takeUserTurn(combatant)
     } else {
       this.takeNPCTurn(combatant)
@@ -159,7 +125,7 @@ class Battle extends React.Component {
     // damage as appropriate
     // damage aims at knight then the lowest HP
     console.log(char.health)
-    char.health -= 3
+    char.health -= 20
     this.passTurn()
   }
 
@@ -218,12 +184,11 @@ class Battle extends React.Component {
 
   //ALL CHARACTER ON ONE SIDE DEAD
   resolveBattle = () => {
-    let reward = this.state.combatants.filter(c => !c.pc).length * 100
-    console.log(reward)
+    let reward = this.state.combatants.filter(c => (!c.party_id && c.health < 1)).length * 100
     this.props.earnGold(reward)
-    if (this.state.combatants.find(c => (c.pc && c.health > 0))) {
-      this.props.addPartyMember(this.state.combatants.find(c => !c.pc))
-      //add to team
+    if (this.state.combatants.find(c => (!!c.party_id && c.health > 0))) {
+      PartyAdapter.updateParty(this.props.party.partyId, {member: this.props.enemies[0]})
+        .then(this.props.addPartyMember)
       //mark square as visited
     } else {
       //send character back to previous square
@@ -232,14 +197,14 @@ class Battle extends React.Component {
 
 
   renderParty = () => {
-    return this.props.party.members.map(m => {
-      return <BattleCharacter role={m.role} />
+    return this.props.allies.map(m => {
+       return <BattleCharacter character={m} />
     })
   }
 
   renderEnemies = () => {
-    return this.props.gameLogic.enemyArr.map(e => {
-      return <BattleCharacter role={e.role} />
+    return this.props.enemies.map(e => {
+      return <BattleCharacter character={e} />
     })
   }
 
@@ -247,25 +212,35 @@ class Battle extends React.Component {
   render() {
     return (
       <div>
-        {this.renderParty()}
-        {this.renderEnemies()}
-        {this.state.rolling ?
+        { this.props.auth.isLoggedIn ?
           <div>
-            <button onClick={this.setDiceRoll}>Roll</button>
-            {this.displayDiceRoll()}
+            <div class="allies-container">
+              {this.renderParty()}
+            </div>
+            <div class="enemies-container">
+              {this.renderEnemies()}
+            </div>
+            {this.state.rolling ?
+              <div>
+                <button onClick={this.setDiceRoll}>Roll</button>
+                {this.displayDiceRoll()}
+              </div>
+              :
+              null
+            }
+            {this.state.spellcasting ?
+              <div>
+                <button onClick={this.endSpellcasting}>Done</button>
+              </div>
+              :
+              null
+            }
+            <button onClick={this.takeTurns}>Start Battle</button>
           </div>
           :
-          null
-        }
-        {this.state.spellcasting ?
-          <div>
-            <button onClick={this.endSpellcasting}>Done</button>
+                    <Redirect to="/home" />
+                  }
           </div>
-          :
-          null
-        }
-        <button onClick={this.takeTurns}>Start Battle</button>
-      </div>
     )
   }
  }
@@ -273,13 +248,15 @@ class Battle extends React.Component {
  const mapStateToProps = (state) => {
    return {
      party: {
-       members: state.party.party.members,
-       characters: state.party.characters,
        inventory: state.party.party.inventory,
-       allEquipment: state.party.equipment
+       allEquipment: state.party.equipment,
+       partyId: state.party.party.id
      },
-     gameLogic: {
-       enemyArr: state.gameLogic.enemyArr
+     enemies: state.gameLogic.enemyArr,
+     allies: state.party.party.members,
+     auth: {
+       isLoggedIn: state.auth.isLoggedIn,
+       user: state.auth.user
      }
    }
  }

@@ -16,10 +16,7 @@ class Equipment extends React.Component {
     if (!this.checkOwnership() && this.props.gold > this.props.equipment.amount ) {
       PartyAdapter.updateParty(this.props.partyId, {item: this.props.equipment})
         .then(res => this.props.purchaseItem(res.gold, res.party_equipments))
-      // this.props.purchaseItem(this.props.equipment)
     }
-    //if all ok then add to inventory
-    //if tabard then update that
   }
 
   render() {
