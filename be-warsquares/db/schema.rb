@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20180223150153) do
 
   create_table "maps", force: :cascade do |t|
     t.string "layout"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -78,9 +79,9 @@ ActiveRecord::Schema.define(version: 20180223150153) do
     t.bigint "party_id"
     t.bigint "map_id"
     t.string "visited"
-    t.boolean "complete"
-    t.integer "moves"
-    t.string "current_square"
+    t.boolean "complete", default: false
+    t.integer "moves", default: 0
+    t.string "current_square", default: "00"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["map_id"], name: "index_party_maps_on_map_id"

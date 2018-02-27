@@ -7,14 +7,15 @@ import PartyAdapter from "../api/PartyAdapter"
 class Equipment extends React.Component {
 
   checkOwnership = () => {
+    console.log("props in check ownership: ", this.props)
     return !!this.props.owned.find(e => {
       return e.equipment_id === this.props.equipment.id
     })
   }
 
   purchaseItem = () => {
-    if (!this.checkOwnership() && this.props.gold > this.props.equipment.amount ) {
-      PartyAdapter.updateParty(this.props.partyId, {item: this.props.equipment})
+    if (!this.checkOwnership() && this.props.gold > this.props.equipment.cost ) {
+      PartyAdapter.updateParty(this.props.partyId, {item: this.props.equipment, gold: this.props.gold - this.props.equipment.cost})
         .then(res => this.props.purchaseItem(res.gold, res.party_equipments))
     }
   }
@@ -23,7 +24,7 @@ class Equipment extends React.Component {
     return (
       <div onClick={this.purchaseItem}>
         <h2>{this.props.equipment.name}</h2>
-        <h3>{this.checkOwnership() ? "IN INVENTORY" : this.props.equipment.amount}</h3>
+        <h3>{this.checkOwnership() ? "IN INVENTORY" : this.props.equipment.cost}</h3>
         <p>{this.props.equipment.bonus}</p>
       </div>
     )
@@ -31,6 +32,7 @@ class Equipment extends React.Component {
  }
 
  const mapStateToProps = (state) => {
+   console.log("state in map state: ", state)
    return {
      gold: state.party.gold,
      owned: state.party.party.inventory,

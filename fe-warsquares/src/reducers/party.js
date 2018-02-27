@@ -3,39 +3,39 @@ export default (state = {
   equipment: [],
   characters: [],
   gold: 0,
-  map: {}
+  maps: {}
 }, action) => {
   switch(action.type) {
     case 'IMPORT_PARTY':
 
-      const party = {
-        name: action.party.party.name,
-        id: action.party.party.id,
-        members: action.party.party.party_characters,
-        inventory: action.party.party.party_equipments
-      }
+      if (action.party.party) {
+        const party = {
+          name: action.party.party.name,
+          id: action.party.party.id,
+          members: action.party.party.party_characters,
+          inventory: action.party.party.party_equipments
+        }
 
-      const map = {
-        ...action.party.party.maps[0],
-        ...action.party.party.party_maps[0]
-      }
-
-      return {
-        ...state,
-        characters: action.party.characters,
-        equipment: action.party.equipment,
-        party: party,
-        map: map,
-        gold: action.party.party.gold
+        return {
+          ...state,
+          characters: action.party.characters,
+          equipment: action.party.equipment,
+          party: party,
+          maps: action.party.maps,
+          gold: action.party.party.gold
+        }
+      } else {
+        return state
       }
 
     case 'LOG_OUT':
+    case 'DELETE_PARTY':
       return {
         party: {},
         equipment: [],
         characters: [],
         gold: 0,
-        map: {}
+        maps: []
       }
 
     case 'PURCHASE_ITEM':
@@ -43,6 +43,7 @@ export default (state = {
         ...state,
         gold: action.gold,
         party: {
+          ...state.party,
           inventory: action.pes
         }
       }
@@ -62,6 +63,12 @@ export default (state = {
             action.character
           ]
         }
+      }
+
+    case 'CREATE_MAP':
+      return {
+        ...state,
+        maps: action.data.maps
       }
 
     default:

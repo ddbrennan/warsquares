@@ -33,3 +33,11 @@ export function earnGold(amount) {
 export function addPartyMember(character) {
   return {type: 'ADD_PARTY_MEMBER', character: character }
 }
+
+export function deleteParty() {
+  return { type: 'DELETE_PARTY' }
+}
+
+export function createMap(data) {
+  return { type: 'CREATE_MAP', data: data }
+}

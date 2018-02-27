@@ -21,7 +21,6 @@ class Store extends React.Component {
           <div>
             <div>Store</div>
             <Link to="/party">Party</Link>
-            <Link to="/battlefield">Battlefield</Link>
 
             <h3>Available gold: {this.props.gold}</h3>
             { this.displayEquipment() }

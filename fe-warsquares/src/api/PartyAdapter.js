@@ -11,7 +11,7 @@ class PartyAdapter {
   }
 
   static getUserParty(id) {
-    return fetch(`${baseUrl}/parties`, {
+    return fetch(`${baseUrl}/parties/${id}`, {
       method: 'GET',
       headers: headers()
     }).then(res => res.json())
