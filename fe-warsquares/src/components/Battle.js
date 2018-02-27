@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { } from '../actions'
 import BattleCharacter from './BattleCharacter'
+import { earnGold, addPartyMember } from '../actions'
 
 class Battle extends React.Component {
   state = {
@@ -112,7 +113,7 @@ class Battle extends React.Component {
     // check if alive
     if (char.health > 0) {
       // highlight character
-      
+
       this.setState({
         rolling: true
       })
@@ -219,9 +220,9 @@ class Battle extends React.Component {
   resolveBattle = () => {
     let reward = this.state.combatants.filter(c => !c.pc).length * 100
     console.log(reward)
-    //reset health to full
+    this.props.earnGold(reward)
     if (this.state.combatants.find(c => (c.pc && c.health > 0))) {
-      console.log("someone joined your team!")
+      this.props.addPartyMember(this.state.combatants.find(c => !c.pc))
       //add to team
       //mark square as visited
     } else {
@@ -232,15 +233,13 @@ class Battle extends React.Component {
 
   renderParty = () => {
     return this.props.party.members.map(m => {
-      let role = this.props.party.characters.find(c => c.id === m.character_id)
-      return <BattleCharacter role={role} />
+      return <BattleCharacter role={m.role} />
     })
   }
 
   renderEnemies = () => {
     return this.props.gameLogic.enemyArr.map(e => {
-      let role = this.props.party.characters.find(c => c.role === e)
-      return <BattleCharacter role={role} />
+      return <BattleCharacter role={e.role} />
     })
   }
 
@@ -276,7 +275,7 @@ class Battle extends React.Component {
      party: {
        members: state.party.party.members,
        characters: state.party.characters,
-       equipment: state.party.party.equipment,
+       inventory: state.party.party.inventory,
        allEquipment: state.party.equipment
      },
      gameLogic: {
@@ -287,6 +286,8 @@ class Battle extends React.Component {
 
  const mapDispatchToProps = (dispatch) => {
    return bindActionCreators({
+     earnGold: earnGold,
+     addPartyMember: addPartyMember
    }, dispatch)
  }
 

@@ -13,10 +13,8 @@ import CreateCharacter from './CreateCharacter'
 class Party extends React.Component {
 
   componentDidMount = () => {
-    if (!this.props.party.name) {
-      PartyAdapter.getUserParty(this.props.auth.user)
-        .then(this.props.importParty)
-    }
+    PartyAdapter.getUserParty(this.props.auth.user)
+      .then(this.props.importParty)
   }
 
   //party members
@@ -81,7 +79,7 @@ class Party extends React.Component {
 
   mapMembers = () => {
     if (this.props.party.members) {
-      return this.props.party.members.map(m => <Character key={m.id} character={m} />)
+      return this.props.party.members.map(m => <div className="party-display-char"><Character key={m.id} character={m} /></div>)
     }
   }
 

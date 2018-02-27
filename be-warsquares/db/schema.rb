@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 20180223150153) do
     t.string "bonus"
     t.integer "amount"
     t.string "name"
+    t.integer "cost"
+    t.integer "category"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -40,6 +42,7 @@ ActiveRecord::Schema.define(version: 20180223150153) do
     t.string "name"
     t.integer "gold"
     t.bigint "user_id"
+    t.integer "current_map"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_parties_on_user_id"
@@ -51,6 +54,9 @@ ActiveRecord::Schema.define(version: 20180223150153) do
     t.string "color"
     t.string "armor_color"
     t.string "name"
+    t.string "role"
+    t.integer "health"
+    t.integer "mana", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["character_id"], name: "index_party_characters_on_character_id"
@@ -60,6 +66,7 @@ ActiveRecord::Schema.define(version: 20180223150153) do
   create_table "party_equipments", force: :cascade do |t|
     t.bigint "party_id"
     t.bigint "equipment_id"
+    t.integer "owner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["equipment_id"], name: "index_party_equipments_on_equipment_id"
@@ -72,6 +79,7 @@ ActiveRecord::Schema.define(version: 20180223150153) do
     t.string "visited"
     t.boolean "complete"
     t.integer "moves"
+    t.string "current_square"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["map_id"], name: "index_party_maps_on_map_id"

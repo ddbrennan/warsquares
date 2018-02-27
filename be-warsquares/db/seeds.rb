@@ -16,6 +16,6 @@ Equipment.create(name: "Staff of Magic", amount: 300, bonus: "Do more magic stuf
 Equipment.create(name: "Axe of Bleediness", amount: 300, bonus: "chop things up")
 Equipment.create(name: "Tabard", amount: 300, bonus: "adds recruit option when encountering")
 Map.create(layout: "F0M1S2W3F2M1S4W1C8")
-PartyCharacter.create(party_id: 1, character_id: 1, color: "pale", armor_color: "red", name: "davidius")
+PartyCharacter.create(party_id: 1, character_id: 1, color: "pale", armor_color: "red", name: "davidius", role: "Knight", health: 20)
 PartyEquipment.create(party_id: 1, equipment_id: 1)
 PartyMap.create(party_id: 1, map_id: 1, visited: "100000000", complete: false, moves: 0)

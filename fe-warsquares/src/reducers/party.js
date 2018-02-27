@@ -10,8 +10,9 @@ export default (state = {
 
       const party = {
         name: action.party.party.name,
+        id: action.party.party.id,
         members: action.party.party.party_characters,
-        equipment: action.party.party.party_equipments
+        inventory: action.party.party.party_equipments
       }
 
       const map = {
@@ -40,9 +41,26 @@ export default (state = {
     case 'PURCHASE_ITEM':
       return {
         ...state,
-        gold: state.gold - action.item.amount,
+        gold: action.gold,
         party: {
-          equipment: [...state.party.equipment, action.item]
+          inventory: action.pes
+        }
+      }
+
+    case 'EARN_GOLD':
+      return {
+        ...state,
+        gold: state.gold + action.amount
+      }
+
+    case 'ADD_PARTY_MEMBER':
+      return {
+        ...state,
+        party: {
+          members: [
+            ...state.party.members,
+            action.character
+          ]
         }
       }
 

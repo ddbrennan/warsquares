@@ -6,6 +6,7 @@ class PartyMaps < ActiveRecord::Migration[5.1]
       t.string :visited
       t.boolean :complete
       t.integer :moves
+      t.string :current_square
 
       t.timestamps
     end

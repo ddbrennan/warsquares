@@ -6,6 +6,9 @@ class PartyCharacters < ActiveRecord::Migration[5.1]
       t.string :color
       t.string :armor_color
       t.string :name
+      t.string :role
+      t.integer :health
+      t.integer :mana, default: 0
 
       t.timestamps
     end

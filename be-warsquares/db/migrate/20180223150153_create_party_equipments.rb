@@ -3,6 +3,8 @@ class CreatePartyEquipments < ActiveRecord::Migration[5.1]
     create_table :party_equipments do |t|
       t.belongs_to :party, foreign_key: true
       t.belongs_to :equipment, foreign_key: true
+      t.integer :owner_id
+      
 
       t.timestamps
     end

@@ -4,6 +4,8 @@ class CreateEquipment < ActiveRecord::Migration[5.1]
       t.string :bonus
       t.integer :amount
       t.string :name
+      t.integer :cost
+      t.integer :category
 
       t.timestamps
     end

@@ -54,11 +54,6 @@ class Encounter extends React.Component {
     this.props.setEnemies(enemyArr)
   }
 
-  resolve = () => {
-    //changes status back to over, adds member to team
-    //changes selected square to previous square if battle lost
-  }
-
   //should only trigger if enemies is > 0
   render() {
     return (

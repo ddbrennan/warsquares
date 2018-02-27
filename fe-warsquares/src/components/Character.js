@@ -9,17 +9,18 @@ class Character extends React.Component {
   pickSvg = () => {
     switch(this.props.character.role) {
       case "Knight":
-        return <Knight color={this.props.character.color} armorColor={this.props.character.armorColor} />
+        return <Knight color={this.props.character.color} armorColor={this.props.character.armor_color} />
       case "Cleric":
-        return <Cleric color={this.props.character.color} armorColor={this.props.character.armorColor} />
+        return <Cleric color={this.props.character.color} armorColor={this.props.character.armor_color} />
       case "Rogue":
-        return <Rogue color={this.props.character.color} armorColor={this.props.character.armorColor} />
+        return <Rogue color={this.props.character.color} armorColor={this.props.character.armor_color} />
       case "Mage":
-        return <Mage color={this.props.character.color} armorColor={this.props.character.armorColor} />
+        return <Mage color={this.props.character.color} armorColor={this.props.character.armor_color} />
     }
   }
 
   render() {
+    console.log("Character: ", this.props.character)
     return(
       <div>
         {this.pickSvg()}

@@ -9,6 +9,14 @@ class PartyAdapter {
       body: JSON.stringify(user)
     }).then(res => res.json())
   }
+
+  static updateParty(id, data) {
+    return fetch(`${baseUrl}/parties/${id}`, {
+      method: 'PATCH',
+      headers: headers(),
+      body: JSON.stringify(data)
+    }).then(res => res.json())
+  }
 }
 
 function headers () {
