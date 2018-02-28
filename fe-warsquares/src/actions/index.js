@@ -45,3 +45,7 @@ export function createMap(data) {
 export function enterBattle(id) {
   return { type: 'ENTER_BATTLE', id: id }
 }
+
+export function stopQuesting() {
+  return { type: 'STOP_QUESTING' }
+}

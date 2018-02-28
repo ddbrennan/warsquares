@@ -46,9 +46,9 @@ class MapDisplay extends React.Component {
         let type = tiles[Math.floor(Math.random() * 4)]
         let num = Math.floor(Math.random() * 3)
 
-        if (x+y < width) {
+        if (x+y < width && x+y > width/2) {
           num += 3
-        } else {
+        } else if (x+y >= width) {
           num += 6
           if (castle.pop() === "C") {
             type = "C"

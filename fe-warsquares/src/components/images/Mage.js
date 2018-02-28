@@ -1,11 +1,11 @@
 import React from "react";
 
-class Mage extends React.Component { 
+class Mage extends React.Component {
 
 
   render() {
     return (
-      <div>Mage</div>
+      <div className="mage-standin">Mage</div>
     )
   }
  }

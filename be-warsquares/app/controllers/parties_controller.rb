@@ -19,6 +19,10 @@ class PartiesController < ApplicationController
       party.update(party_params)
     end
 
+    if params[:member]
+
+    end
+
     if params[:item]
       party.equipments << Equipment.find(params[:item][:id])
     end

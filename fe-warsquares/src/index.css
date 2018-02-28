@@ -90,3 +90,25 @@ body {
 .party-display-char {
   width: 25%;
 }
+
+.rogue-standin {
+  width: 80%;
+  height: 80%;
+  background-color: red;
+}
+
+.mage-standin {
+  width: 80%;
+  height: 80%;
+  background-color: blue;
+}
+
+.cleric-standin {
+  width: 80%;
+  height: 80%;
+  background-color: yellow;
+}
+
+.battle-char {
+  width: 25%;
+}

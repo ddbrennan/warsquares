@@ -6,8 +6,14 @@ import { bindActionCreators } from 'redux'
 import GridMap from './GridMap'
 import Encounter from './Encounter'
 import Character from './Character'
+import { stopQuesting } from '../actions'
 
 class Battlefield extends React.Component {
+
+  //will unmount switch questing to false
+  componentWillUnmount = () => {
+    this.props.stopQuesting()
+  }
 
   render() {
     return (
@@ -63,4 +69,4 @@ class Battlefield extends React.Component {
    }
  }
 
-export default connect(mapStateToProps)(Battlefield)
+export default connect(mapStateToProps, { stopQuesting })(Battlefield)

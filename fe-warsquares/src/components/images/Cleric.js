@@ -1,11 +1,11 @@
-import React from "react"; 
+import React from "react";
 
 class Cleric extends React.Component {
 
 
   render() {
     return (
-      <div>Cleric</div>
+      <div className="cleric-standin">Cleric</div>
     )
   }
  }

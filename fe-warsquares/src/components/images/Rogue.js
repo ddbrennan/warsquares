@@ -1,11 +1,11 @@
 import React from "react";
 
-class Rogue extends React.Component { 
+class Rogue extends React.Component {
 
 
   render() {
     return (
-      <div>Rogue</div>
+      <div className="rogue-standin">Rogue</div>
     )
   }
  }
