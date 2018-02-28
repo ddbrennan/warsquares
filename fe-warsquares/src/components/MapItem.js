@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from 'react-redux'
+import { enterBattle } from '../actions'
 
 class MapItem extends React.Component {
 
@@ -7,7 +9,7 @@ class MapItem extends React.Component {
     console.log("MapItem: ", this.props)
 
     return (
-      <div>
+      <div onClick={() => this.props.enterBattle(this.props.map.id)}>
         <h3>Map</h3>
         <div>Name: {this.props.map.name}</div>
         <div>Size: {Math.floor(Math.sqrt(this.props.info.visited.length))}</div>
@@ -16,4 +18,4 @@ class MapItem extends React.Component {
     )
   }
  }
-export default MapItem
+export default connect(null, { enterBattle })(MapItem)

@@ -6,20 +6,21 @@ import { selectSquare } from '../actions'
 
 class GridMap extends React.Component {
   state = {
-    width: Math.sqrt(this.props.map.visited.length)
+    width: Math.sqrt(this.props.map.info.visited.length)
   }
 
   makeSquares = () => {
     let arr = []
     let key = 0
-    let tiles = this.props.map.layout.match(/.{2}/g)
+    let tiles = this.props.map.map.layout.match(/.{2}/g)
+    console.log(this.state.width, this.props.map.info.visited.length)
     for (let i=0; i < this.state.width; i++) {
       for (let j=0; j < this.state.width; j++) {
         arr.push(<Square
                     x={j}
                     y={i}
                     tile={tiles[key]}
-                    visited={this.props.map.visited[key]}
+                    visited={this.props.map.info.visited[key]}
                     key={key++} />)
       }
     }

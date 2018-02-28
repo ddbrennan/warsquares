@@ -41,3 +41,7 @@ export function deleteParty() {
 export function createMap(data) {
   return { type: 'CREATE_MAP', data: data }
 }
+
+export function enterBattle(id) {
+  return { type: 'ENTER_BATTLE', id: id }
+}

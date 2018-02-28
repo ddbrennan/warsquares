@@ -65,25 +65,30 @@ class Party extends React.Component {
       <div>
         {this.props.auth.isLoggedIn ?
           <div>
-
             { this.props.party.name ?
               <div>
-                <Link to="/store">Store</Link>
+                {!this.props.questing ?
+                  <div>
+                    <Link to="/store">Store</Link>
 
-                <h1>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
+                    <h1>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
 
-                  <MapDisplay />
+                      <MapDisplay />
 
-                <div className="party-members">{this.mapMembers()}</div>
-                <div className="inventory">{this.mapEquipment()}</div>
-                <p>{this.props.gold}</p>
-                <button onClick={this.deleteParty}>Delete Party</button>
+                    <div className="party-members">{this.mapMembers()}</div>
+                    <div className="inventory">{this.mapEquipment()}</div>
+                    <p>{this.props.gold}</p>
+                    <button onClick={this.deleteParty}>Delete Party</button>
+                  </div>
+                  :
+                  <Redirect to="/battlefield"></Redirect>
+                }
               </div>
               :
               <CreateCharacter />
-            }
+              }
           </div>
-        :
+          :
           <Redirect to="/home"/>
         }
       </div>
@@ -104,7 +109,8 @@ class Party extends React.Component {
        equipmentAll: state.party.equipment,
        id: state.party.party.id,
        gold: state.party.party.gold
-     }
+     },
+     questing: state.gameLogic.questing
 
    }
  }

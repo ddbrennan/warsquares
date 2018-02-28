@@ -12,11 +12,10 @@ class Battlefield extends React.Component {
   render() {
     return (
       <div>
-        { this.props.auth.isLoggedIn ?
+        { this.props.auth.isLoggedIn && this.props.questing ?
           <div>
             <div>Battlefield</div>
             <Link to="/party">Party</Link>
-            <Link to="/store">Store</Link>
 
 
           { this.props.encounter && <Encounter />}
@@ -46,14 +45,21 @@ class Battlefield extends React.Component {
      }
    }
 
+   let map ={}
+
+   if (state.party.maps.length) {
+     map = state.party.maps.find(m => m.map.id === state.gameLogic.currentMap)
+   }
+
    return {
      auth: {
        isLoggedIn: state.auth.isLoggedIn,
        user: state.auth.user
      },
-     map: state.party.map,
+     map: map,
      encounter: state.gameLogic.encounter,
-     character: character
+     character: character,
+     questing: state.gameLogic.questing
    }
  }
 

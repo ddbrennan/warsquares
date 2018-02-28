@@ -16,7 +16,7 @@ class MapDisplay extends React.Component {
   listMaps = () => {
 
     console.log(this.props.maps)
-    
+
     if (this.props.maps) {
       return this.props.maps.map(m => <div><MapItem map={m.map} info={m.info} /></div>)
     }
@@ -46,24 +46,27 @@ class MapDisplay extends React.Component {
         let type = tiles[Math.floor(Math.random() * 4)]
         let num = Math.floor(Math.random() * 3)
 
-        if (x+y < width && x+y > 0) {
+        if (x+y < width) {
           num += 3
-        } else if (x+y > 0){
+        } else {
           num += 6
           if (castle.pop() === "C") {
             type = "C"
             num = 9
           }
         }
-
-        mapLayout += (type + num)
+        if (x+y > 0) {
+          mapLayout += (type + num)
+        }
       }
     }
 
     let visited = "1"
-    for (let i = 0; i < mapLayout.length/2 - 1; i++) {
+    for (let i = 0; i < (mapLayout.length/2 - 1); i++) {
       visited += "0"
     }
+
+    console.log(mapLayout.length)
 
     MapsAdapter.createMap({name: this.state.name, layout: mapLayout, visited: visited, party_id: this.props.id})
       .then(this.props.createMap)

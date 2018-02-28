@@ -3,10 +3,12 @@ export default (state = {
   encounter: false,
   enemies: "",
   hasTabard: false,
-  enemyArr: []
+  enemyArr: [],
+  currentMap: null,
+  questing: false
 }, action) => {
   switch(action.type) {
-    
+
     case 'SELECT_SQUARE':
       let newX = state.selectedSquare[0] + action.change.x
       let newY = state.selectedSquare[1] + action.change.y
@@ -21,6 +23,10 @@ export default (state = {
 
     case 'SET_ENEMIES':
       return {...state, enemyArr: action.enemyArr }
+
+    case 'ENTER_BATTLE':
+      console.log("Embarking on Quest...")
+      return {...state, currentMap: action.id, questing: true}
 
     default:
       return state
