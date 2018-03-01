@@ -2,7 +2,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Libre Baskerville', serif;
-  background-color: #a0c3ff;
+  height: 100vh;
+  background: linear-gradient(-15deg, #a0c3ff 20%, #cfe8f9 35%, #a0c3ff 100%);
 }
 
 .square {
@@ -43,13 +44,13 @@ body {
   top: 0;
   left: 0;
   z-index: -1;
-  animation: floating 10s infinite;
+  /* animation: floating 3s ease infinite; */
 }
 
 @keyframes floating {
-  0% {top: 0%;}
-  50% {top: 2%;}
-  100% {top: 0%;}
+  0% {top: 0;}
+  50% {top: 20px;}
+  100% {top: 0;}
 }
 
 .grid-box {

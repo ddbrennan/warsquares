@@ -228,24 +228,28 @@ class Battle extends React.Component {
 
   //ALL CHARACTER ON ONE SIDE DEAD
   resolveBattle = () => {
-
     let reward = this.state.combatants.filter(c => (!c.party_id && c.health < 1)).length * 100
+    let recruit = {}
+    let currentSquare = this.props.previousSquare.join("")
+    let visited = this.props.map.info.visited
+    let moveCount = this.props.map.info.moves + 1
+    let completed = false
 
-    // let recruit = {}
-    // let currentSquare = ""
-    //
-    // if (this.state.combatants.find(c => (!!c.party_id && c.health > 0))) {
-    //   recruit = this.props.enemies.shift()
-    //   currentSquare = this.props.selectedSquare.join
-    // }
-    //
+    if (this.state.combatants.find(c => (!!c.party_id && c.health > 0))) {
+      recruit = this.props.enemies.shift()
+      currentSquare = this.props.selectedSquare.join("")
+      let visId = [this.props.selectedSquare[0] + this.props.selectedSquare[1]*Math.sqrt(this.props.map.info.visited.length)]
+      let newVis = visited.split("")
+      newVis[visId] = 1
+      visited = newVis.join("")
+      if (this.props.map.map.layout.match(/.{2}/g)[visId][0] === C) {
+        console.log("you won!")
+      }
+      // if yes completed = true
+    }
+
     // PartyAdapter.updateParty(this.props.party.partyId, {recruit: recruit, gold: this.props.gold + reward, current_square: currentSquare})
     //   .then(() => this.props.resolveEncounter())
-    //   //mark square as visited
-    //   //remove from enemy array
-    //   //current square updated
-    //   //encounter false, questing true
-    //   //send character back to previous square
     this.props.resolveEncounter(this.props.enemies[0], this.props.gold + reward)
   }
 
@@ -318,6 +322,12 @@ class Battle extends React.Component {
  }
 
  const mapStateToProps = (state) => {
+
+   let map = []
+   if (state.party.maps.length) {
+     map = state.party.maps.find(m => m.map.id === state.gameLogic.currentMap)
+   }
+
    return {
      party: {
        inventory: state.party.party.inventory,
@@ -330,6 +340,7 @@ class Battle extends React.Component {
      questing: state.gameLogic.questing,
      selectedSquare: state.gameLogic.selectedSquare,
      previousSquare: state.gameLogic.previousSquare,
+     map: map,
      auth: {
        isLoggedIn: state.auth.isLoggedIn,
        user: state.auth.user

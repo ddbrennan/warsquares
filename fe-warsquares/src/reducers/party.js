@@ -3,7 +3,7 @@ export default (state = {
   equipment: [],
   characters: [],
   gold: 0,
-  maps: {}
+  maps: []
 }, action) => {
   switch(action.type) {
     case 'IMPORT_PARTY':
