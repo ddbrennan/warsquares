@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { } from '../actions'
 import BattleCharacter from './BattleCharacter'
-import { earnGold, addPartyMember } from '../actions'
+import { resolveEncounter } from '../actions'
 import PartyAdapter from '../api/PartyAdapter'
 import { Redirect } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -17,7 +17,8 @@ class Battle extends React.Component {
     rolling: false,
     spellcasting: false,
     currentTurn: 0,
-    rollCount: 0
+    rollCount: 0,
+    damage: 0
   }
 
   getAllList = () => {
@@ -94,19 +95,34 @@ class Battle extends React.Component {
     })
   }
 
+  addEquipment = (weapon) => {
+      let newRolls = [...this.state.rolls, ...Array(weapon.amount).fill("sword")] // ["sword","sword"]
+
+      this.setState({
+        rolls: newRolls
+      })
+  }
+
   evaluateDice = () => {
-    //get equipment bonuses (category, bonus)
-    // add more rolls based on cat + bonus
+    let weapon = this.props.party.inventory.find(i => i.owner_id === this.state.combatants[this.state.currentTurn].id)
 
-    // for (const roll in this.state.rolls) {
-      // set some status to damaging
-      // turn on click events on ENEMIES
-      // decrease remaining damage by 1 for each click
-      // decrease health by 1 for each click
+    if (weapon) {
+      let stats = this.props.party.allEquipment.find(e => e.id === weapon.equipment_id)
+      this.addEquipment(stats)
+    }
 
-      // heal active character
-
-      // add mana to mana pool (persists for fight)
+    let evalRolls = {heart: 0, sword: 0, mana: 0}
+    for (let face of this.state.rolls) {
+      evalRolls[face] += 1
+    }
+    //add damage to pool
+    this.setState({
+      damage: evalRolls.sword
+    })
+    // heal active character
+    this.state.combatants[this.state.currentTurn].health += evalRolls.heart
+    // add mana to mana pool (persists for fight)
+    this.state.combatants[this.state.currentTurn].mana += evalRolls.mana
   }
 
   startSpellcasting = () => {
@@ -137,7 +153,7 @@ class Battle extends React.Component {
     // all damage unless life is < 50% in which case heal 1-3 and rest damage
     // damage as appropriate
     // damage aims at knight then the lowest HP
-    console.log(char.health)
+
     char.health -= 20
     this.passTurn()
   }
@@ -163,7 +179,7 @@ class Battle extends React.Component {
 
   rollDice = (rolls = 6) => {
     let arr = []
-    const faces = ["Sword", "Heart", "Mana"]
+    const faces = ["sword", "heart", "mana"]
 
     for (let i=0; i < rolls; i++) {
       if (this.state.locked[i]) {
@@ -181,14 +197,18 @@ class Battle extends React.Component {
     let newRC = this.state.rollCount + 1
     let doneRolling = false
     if (newRC > 2) {
-      doneRolling = true
+      this.setState({
+        rolls: rolls,
+        rollCount: newRC,
+        assigningDamage: true
+      }, this.evaluateDice)
+    } else {
+      this.setState({
+        rolls: rolls,
+        rollCount: newRC,
+        assigningDamage: false
+      })
     }
-
-    this.setState({
-      rolls: rolls,
-      rollCount: newRC,
-      assigningDamage: doneRolling
-    })
   }
 
   displayDiceRoll = () => {
@@ -205,21 +225,28 @@ class Battle extends React.Component {
     })
   }
 
+
   //ALL CHARACTER ON ONE SIDE DEAD
   resolveBattle = () => {
+
     let reward = this.state.combatants.filter(c => (!c.party_id && c.health < 1)).length * 100
-    // this.props.earnGold(reward)
-    if (this.state.combatants.find(c => (!!c.party_id && c.health > 0))) {
-      // PartyAdapter.updateParty(this.props.party.partyId, {character: this.props.enemies[0], gold: this.props.gold + reward})
-      //   .then(
-      this.props.addPartyMember(this.props.enemies[0])
-      //mark square as visited
-      //remove from enemy array
-      //current square updated
-      //encounter false, questing true
-    } else {
-      //send character back to previous square
-    }
+
+    // let recruit = {}
+    // let currentSquare = ""
+    //
+    // if (this.state.combatants.find(c => (!!c.party_id && c.health > 0))) {
+    //   recruit = this.props.enemies.shift()
+    //   currentSquare = this.props.selectedSquare.join
+    // }
+    //
+    // PartyAdapter.updateParty(this.props.party.partyId, {recruit: recruit, gold: this.props.gold + reward, current_square: currentSquare})
+    //   .then(() => this.props.resolveEncounter())
+    //   //mark square as visited
+    //   //remove from enemy array
+    //   //current square updated
+    //   //encounter false, questing true
+    //   //send character back to previous square
+    this.props.resolveEncounter(this.props.enemies[0], this.props.gold + reward)
   }
 
 
@@ -260,7 +287,6 @@ class Battle extends React.Component {
                   }
                   {this.state.assigningDamage ?
                     <div>
-                      {this.evaluateDice()}
                       <div>Click people to damage them.</div>
                       <button onClick={this.startSpellcasting}>Done</button>
                     </div>
@@ -302,6 +328,8 @@ class Battle extends React.Component {
      enemies: state.gameLogic.enemyArr,
      allies: state.party.party.members,
      questing: state.gameLogic.questing,
+     selectedSquare: state.gameLogic.selectedSquare,
+     previousSquare: state.gameLogic.previousSquare,
      auth: {
        isLoggedIn: state.auth.isLoggedIn,
        user: state.auth.user
@@ -311,8 +339,7 @@ class Battle extends React.Component {
 
  const mapDispatchToProps = (dispatch) => {
    return bindActionCreators({
-     earnGold: earnGold,
-     addPartyMember: addPartyMember
+     resolveEncounter: resolveEncounter
    }, dispatch)
  }
 

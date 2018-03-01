@@ -13,7 +13,6 @@ class GridMap extends React.Component {
     let arr = []
     let key = 0
     let tiles = this.props.map.map.layout.match(/.{2}/g)
-    console.log(this.state.width, this.props.map.info.visited.length)
     for (let i=0; i < this.state.width; i++) {
       for (let j=0; j < this.state.width; j++) {
         arr.push(<Square
@@ -68,6 +67,8 @@ class GridMap extends React.Component {
         <div className="grid-box"
              style={{"width": this.state.width * 150, "height": this.state.width * 150}}>
           { this.makeSquares() }
+          <div id="sides"></div>
+          <div id="sides2"></div>
         </div>
       </div>
     )

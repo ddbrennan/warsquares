@@ -1,4 +1,5 @@
 class PartiesController < ApplicationController
+  
 
   def create
     party = Party.create(name: params[:party][:name], user_id: params[:party][:user_id], gold: 1000)
@@ -19,8 +20,12 @@ class PartiesController < ApplicationController
       party.update(party_params)
     end
 
-    if params[:member]
-
+    if recruit_params
+      pc = PartyCharacter.new(recruit_params)
+      char = Character.find_by(role: recruit_params[:role])
+      pc.party = party
+      pc.character = char
+      pc.save
     end
 
     if params[:item]
@@ -59,6 +64,10 @@ class PartiesController < ApplicationController
 
     def party_params
       params.require(:party).permit(:gold)
+    end
+
+    def recruit_params
+      params.require(:recruit).permit(:name, :role, :health, :max_health, :mana, :armor_color, :armor, :color)
     end
 
 end

@@ -34,7 +34,6 @@ class Store extends React.Component {
  }
 
  const mapStateToProps = (state) => {
-   console.log(state)
    return {
      auth: {
        isLoggedIn: state.auth.isLoggedIn,

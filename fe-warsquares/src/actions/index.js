@@ -26,12 +26,8 @@ export function purchaseItem(gold, pes) {
   return { type: 'PURCHASE_ITEM', gold: gold, pes: pes}
 }
 
-export function earnGold(amount) {
-  return { type: 'EARN_GOLD', amount: amount}
-}
-
-export function addPartyMember(character) {
-  return {type: 'ADD_PARTY_MEMBER', character: character }
+export function resolveEncounter(character, gold) {
+  return {type: 'RESOLVE_ENCOUNTER', character: character, gold: gold }
 }
 
 export function deleteParty() {

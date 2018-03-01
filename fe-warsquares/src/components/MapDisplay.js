@@ -15,8 +15,6 @@ class MapDisplay extends React.Component {
   //LIST OF MAPS
   listMaps = () => {
 
-    console.log(this.props.maps)
-
     if (this.props.maps) {
       return this.props.maps.map(m => <div><MapItem map={m.map} info={m.info} /></div>)
     }
@@ -66,8 +64,6 @@ class MapDisplay extends React.Component {
       visited += "0"
     }
 
-    console.log(mapLayout.length)
-
     MapsAdapter.createMap({name: this.state.name, layout: mapLayout, visited: visited, party_id: this.props.id})
       .then(this.props.createMap)
     // this.props.createMap(this.state.name, mapLayout)
@@ -108,7 +104,6 @@ class MapDisplay extends React.Component {
  }
 
 const mapStateToProps = (state) => {
-  console.log("state for maps: ", state.party.maps)
   return {
     maps: state.party.maps,
     id: state.party.party.id

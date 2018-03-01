@@ -6,8 +6,6 @@ class MapItem extends React.Component {
 
   render() {
 
-    console.log("MapItem: ", this.props)
-
     return (
       <div onClick={() => this.props.enterBattle(this.props.map.id)}>
         <h3>Map</h3>

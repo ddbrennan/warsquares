@@ -27,10 +27,9 @@ export default (state = {
       return {...state, enemyArr: action.enemyArr }
 
     case 'ENTER_BATTLE':
-      console.log("Embarking on Quest...")
       return {...state, currentMap: action.id, questing: true}
 
-    case 'ADD_PARTY_MEMBER':
+    case 'RESOLVE_ENCOUNTER':
       return {...state, questing: true, encounter: false}
 
     case 'STOP_QUESTING':

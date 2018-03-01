@@ -5,7 +5,7 @@ class CreateEquipment < ActiveRecord::Migration[5.1]
       t.integer :amount
       t.string :name
       t.integer :cost
-      t.integer :category
+      t.string :category
 
       t.timestamps
     end

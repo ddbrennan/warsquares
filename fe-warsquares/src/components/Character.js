@@ -20,7 +20,6 @@ class Character extends React.Component {
   }
 
   render() {
-    console.log("Character: ", this.props.character)
     return(
       <div>
         {this.pickSvg()}

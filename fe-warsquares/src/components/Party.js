@@ -14,7 +14,6 @@ import CreateCharacter from './CreateCharacter'
 class Party extends React.Component {
 
   componentWillMount = () => {
-    console.log("Attempting to fetch for: ", this.props.auth.user)
     if (this.props.auth.user) {
       PartyAdapter.getUserParty(this.props.auth.user.id)
         .then(this.props.importParty)

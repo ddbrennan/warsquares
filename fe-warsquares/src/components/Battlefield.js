@@ -26,11 +26,6 @@ class Battlefield extends React.Component {
 
           { this.props.encounter && <Encounter />}
           <GridMap map={this.props.map} />
-            <div className="corner-char-box">
-              <div className="big-corner-char">
-                <Character character={this.props.character} />
-              </div>
-            </div>
           </div>
         :
           <Redirect to="/home" />

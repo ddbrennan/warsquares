@@ -32,7 +32,6 @@ class Equipment extends React.Component {
  }
 
  const mapStateToProps = (state) => {
-   console.log("state in map state: ", state)
    return {
      gold: state.party.gold,
      owned: state.party.party.inventory,

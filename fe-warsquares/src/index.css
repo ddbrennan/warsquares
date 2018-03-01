@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Libre Baskerville', serif;
+  background-color: #a0c3ff;
 }
 
 .square {
@@ -42,30 +43,79 @@ body {
   top: 0;
   left: 0;
   z-index: -1;
+  animation: floating 10s infinite;
+}
+
+@keyframes floating {
+  0% {top: 0%;}
+  50% {top: 2%;}
+  100% {top: 0%;}
 }
 
 .grid-box {
   transform: rotateX(60deg) rotateY(0deg) rotateZ(-135deg);
 }
 
+#sides {
+  width: 20%;
+  height: 100%;
+  /* background-color: #C4A97A; */
+  background-image: url('./images/tiles-12.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: -10%;
+  left: -20%;
+  transform: skewY(45deg);
+}
+
+
+#sides2 {
+  width: 100%;
+  height: 20%;
+  /* background-color: #C4A97A; */
+  background-image: url('./images/tiles-11.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: -20%;
+  right: 10%;
+  transform: skewX(45deg);
+}
+
+
 .woods {
-  background-image: url('./images/forest.jpeg');
+  background: url('./images/tiles-04.png') center center/contain;
 }
 
 .mountain {
-  background-image: url('./images/mountain.jpeg');
+  background: url('./images/tiles-08.png') center center/contain;;
 }
 
 .field {
-  background-image: url('./images/kh.jpeg');
+  background: url('./images/tiles-05.png') center center/contain;;
 }
 
 .swamp {
-  background-image: url('./images/swamp.jpeg');
+  background: url('./images/tiles-07.png') center center/contain;;
 }
 
 .castle {
-  background-image: url('./images/castle.jpeg');
+  background: url('./images/tiles-10.png') center center/contain;;
+}
+
+.castle::before {
+  position: absolute;
+  content: '';
+  background-image: url('./images/tiles-09.png');
+  background-repeat: no-repeat;
+  background-size: 80% 100%;
+  background-position: 0% 0%;
+  margin: 3% 0 0 5%;
+  width: 200px;
+  height: 300px;
+  pointer-events: none;
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(135deg);
 }
 
 .new-char-avatar {

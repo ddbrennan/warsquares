@@ -13,7 +13,6 @@ class Square extends React.Component {
   }
 
   determineClass = () => {
-    console.log(this.props.tile[0])
 
     switch(this.props.tile[0]) {
       case 'M':

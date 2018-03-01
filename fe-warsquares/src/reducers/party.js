@@ -54,10 +54,11 @@ export default (state = {
         gold: state.gold + action.amount
       }
 
-    case 'ADD_PARTY_MEMBER':
+    case 'RESOLVE_ENCOUNTER':
       return {
         ...state,
         party: {
+          ...state.party,
           members: [
             ...state.party.members,
             action.character
