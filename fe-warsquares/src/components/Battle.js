@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { } from '../actions'
 import BattleCharacter from './BattleCharacter'
-import { resolveEncounter } from '../actions'
+import { resolveEncounter, damageEnemy } from '../actions'
 import PartyAdapter from '../api/PartyAdapter'
 import { Redirect } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -27,6 +27,8 @@ class Battle extends React.Component {
       const allies = this.props.allies
       let cap = Math.max(enemies.length, allies.length)
       let allList = []
+
+      //compare, loop over longer of the two
 
       for (let i = 0; i < cap; i++) {
         if (allies[i]) {
@@ -91,7 +93,8 @@ class Battle extends React.Component {
 
   dicePhase = () => {
     this.setState({
-      rolling: true
+      rolling: true,
+      rollCount: 0
     })
   }
 
@@ -127,7 +130,6 @@ class Battle extends React.Component {
 
   startSpellcasting = () => {
     this.setState({
-      assigningDamage: false,
       spellcasting: true
     })
   }
@@ -141,7 +143,7 @@ class Battle extends React.Component {
 
   takeNPCTurn = (char) => {
     if (char.health > 0) {
-      setTimeout(() => this.npcAttack(char), 300)
+      setTimeout(() => this.npcAttack(char), 1000)
     } else {
       this.passTurn()
     }
@@ -149,12 +151,19 @@ class Battle extends React.Component {
   }
 
   npcAttack = (char) => {
-    // highlight character
-    // all damage unless life is < 50% in which case heal 1-3 and rest damage
+    let swords = 6
+    let hearts = 0
+    if ((char.health/char.max_health) < .5) {
+      hearts = Math.floor(Math.random() * 4)
+      swords -= hearts
+    }
+
+    this.state.combatants[this.state.currentTurn].health += hearts
+
+    //iterate through allies
+    //find knight, if not find lowest health
     // damage as appropriate
     // damage aims at knight then the lowest HP
-
-    char.health -= 20
     this.passTurn()
   }
 
@@ -200,13 +209,11 @@ class Battle extends React.Component {
       this.setState({
         rolls: rolls,
         rollCount: newRC,
-        assigningDamage: true
       }, this.evaluateDice)
     } else {
       this.setState({
         rolls: rolls,
-        rollCount: newRC,
-        assigningDamage: false
+        rollCount: newRC
       })
     }
   }
@@ -233,36 +240,57 @@ class Battle extends React.Component {
     let currentSquare = this.props.previousSquare.join("")
     let visited = this.props.map.info.visited
     let moveCount = this.props.map.info.moves + 1
-    let completed = false
+    let complete = false
 
     if (this.state.combatants.find(c => (!!c.party_id && c.health > 0))) {
       recruit = this.props.enemies.shift()
+      recruit.health = recruit.max_health
       currentSquare = this.props.selectedSquare.join("")
       let visId = [this.props.selectedSquare[0] + this.props.selectedSquare[1]*Math.sqrt(this.props.map.info.visited.length)]
       let newVis = visited.split("")
       newVis[visId] = 1
       visited = newVis.join("")
-      if (this.props.map.map.layout.match(/.{2}/g)[visId][0] === C) {
-        console.log("you won!")
+      if (this.props.map.map.layout.match(/.{2}/g)[visId][0] === "C") {
+        complete = true
       }
-      // if yes completed = true
     }
 
-    // PartyAdapter.updateParty(this.props.party.partyId, {recruit: recruit, gold: this.props.gold + reward, current_square: currentSquare})
-    //   .then(() => this.props.resolveEncounter())
-    this.props.resolveEncounter(this.props.enemies[0], this.props.gold + reward)
+    PartyAdapter.updateParty(this.props.party.partyId, {
+      recruit: recruit,
+      gold: this.props.gold + reward,
+      map: {
+        current_square: currentSquare,
+        visited: visited,
+        moves: moveCount,
+        complete: complete,
+        id: this.props.map.info.id
+      }
+    })
+       .then(this.props.resolveEncounter)
+  }
+
+  applyDamage = enemy => {
+    if (enemy.health > 0 && !!this.state.damage) {
+        this.props.damageEnemy(enemy)
+        let damage = this.state.damage - 1
+        let spellcasting = !!damage ? false : true
+        this.setState({
+          damage: damage,
+          spellcasting: spellcasting
+        })
+    }
   }
 
 
   renderParty = () => {
     return this.props.allies.map(m => {
-       return <div className="battle-char"><BattleCharacter character={m} /></div>
+       return <div className={`battle-char battle-box ${m === this.state.combatants[this.state.currentTurn] ? "active-battler" : ""}`}><BattleCharacter character={m} /></div>
     })
   }
 
   renderEnemies = () => {
     return this.props.enemies.map(e => {
-      return <div className="battle-char"><BattleCharacter character={e} /></div>
+      return <div className={`battle-char battle-box ${e === this.state.combatants[this.state.currentTurn] ? "active-battler" : ""}`} onClick={() => this.applyDamage(e)}><BattleCharacter character={e} /></div>
     })
   }
 
@@ -289,7 +317,7 @@ class Battle extends React.Component {
                     :
                     null
                   }
-                  {this.state.assigningDamage ?
+                  {!!this.state.damage ?
                     <div>
                       <div>Click people to damage them.</div>
                       <button onClick={this.startSpellcasting}>Done</button>
@@ -350,7 +378,8 @@ class Battle extends React.Component {
 
  const mapDispatchToProps = (dispatch) => {
    return bindActionCreators({
-     resolveEncounter: resolveEncounter
+     resolveEncounter: resolveEncounter,
+     damageEnemy: damageEnemy
    }, dispatch)
  }
 

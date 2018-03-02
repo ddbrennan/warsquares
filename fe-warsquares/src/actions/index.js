@@ -26,8 +26,8 @@ export function purchaseItem(gold, pes) {
   return { type: 'PURCHASE_ITEM', gold: gold, pes: pes}
 }
 
-export function resolveEncounter(character, gold) {
-  return {type: 'RESOLVE_ENCOUNTER', character: character, gold: gold }
+export function resolveEncounter(party) {
+  return {type: 'RESOLVE_ENCOUNTER', party: party }
 }
 
 export function deleteParty() {
@@ -44,4 +44,8 @@ export function enterBattle(id) {
 
 export function stopQuesting() {
   return { type: 'STOP_QUESTING' }
+}
+
+export function damageEnemy(enemy) {
+  return { type: 'DAMAGE_ENEMY', enemy: enemy}
 }

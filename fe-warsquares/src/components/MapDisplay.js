@@ -30,6 +30,8 @@ class MapDisplay extends React.Component {
   createMap = (e) => {
     e.preventDefault()
 
+    let beforeConstruction = performance.now()
+
     const tiles = ["F", "M", "S", "W"]
     let width = this.state.width
     let mapLayout = "F0"
@@ -72,6 +74,10 @@ class MapDisplay extends React.Component {
       name: "",
       width: ""
     })
+
+    let afterConstruction = performance.now()
+
+    console.log(afterConstruction - beforeConstruction)
   }
 
   handleChange = (e) => {

@@ -1,4 +1,5 @@
 class MapsController < ApplicationController
+  before_action :authorize_user!
 
   def create
     map = Map.create(map_params)

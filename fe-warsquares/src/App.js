@@ -73,3 +73,49 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+
+  // render() {
+  //   const AuthLoginForm = authorize(LoginForm);
+  //   const AuthProfile = authorize(Profile);
+  //   console.log(this.props);
+  //   return (
+  //     <div className="App">
+  //       <Navigation />
+  //       <Switch>
+  //         ...
+  //         <Route exact path="/profile" component={AuthProfile} />
+  //         <Route
+  //           exact
+  //           path="/login"
+  //           render={props => <AuthLoginForm onSubmit={this.logIn} {...props} />}
+  //         />
+  //         <Redirect to="/" />
+  //       </Switch>
+  //       ...
+  //     </div>
+  //   );
+  // }
+
+//   import React from "react";
+// import { Redirect } from "react-router-dom";
+// const authorize = RenderedComponent => {
+//   return class extends React.Component {
+//     render() {
+//       console.log(this.props);
+//       if (
+//         localStorage.getItem("jwt") &&
+//         this.props.location.pathname === "/login"
+//       ) {
+//         return <Redirect to="/" />;
+//       } else if (
+//         !localStorage.getItem("jwt") &&
+//         this.props.location.pathname !== "/login"
+//       ) {
+//         return <Redirect to="/login" />;
+//       } else {
+//         return <RenderedComponent />;
+//       }
+//     }
+//   };
+// };
+// export default authorize;

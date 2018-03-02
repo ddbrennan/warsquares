@@ -23,7 +23,6 @@ class Character extends React.Component {
     return(
       <div>
         {this.pickSvg()}
-        <h3>{this.props.character.name}</h3>
       </div>
     )
   }

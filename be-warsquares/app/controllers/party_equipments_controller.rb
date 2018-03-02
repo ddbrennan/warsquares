@@ -1,2 +1,0 @@
-class PartyEquipmentsController < ApplicationController
-end

@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { startEncounter } from '../actions'
+import Character from './Character'
 
 
 class Square extends React.Component {
@@ -28,15 +29,23 @@ class Square extends React.Component {
     }
   }
 
+  beenVisited = () => {
+
+    return !!parseInt(this.props.visitedArray[this.props.x + this.props.y*Math.sqrt(this.props.visitedArray.length)]) ? 'visited' : ''
+  }
+
   isSelected = () => {
     return this.props.x === this.props.selectedSquare[0] && this.props.y === this.props.selectedSquare[1] ? 'selected' : ''
   }
 
+
+
   render() {
+
     return (
       <div>
         <div
-          className={`square ${this.determineClass()} ${this.isSelected()}`}>
+          className={`square ${this.determineClass()} ${this.isSelected()} ${this.beenVisited()}`}>
         </div>
       </div>
     )
@@ -45,7 +54,9 @@ class Square extends React.Component {
 
  const mapStateToProps = (state) => {
     return {
-      selectedSquare: state.gameLogic.selectedSquare
+      selectedSquare: state.gameLogic.selectedSquare,
+      character: state.party.party.members[0],
+      visitedArray: state.party.maps.find(pm => pm.map.id === state.gameLogic.currentMap).info.visited
     }
  }
 

@@ -29,12 +29,13 @@ class Encounter extends React.Component {
     this.calculateEnemies()
   }
 
-  makeEnemy = (role) => {
+  makeEnemy = (role, id) => {
     let name = NAME_ARRAY[Math.floor(Math.random() * NAME_ARRAY.length)]
     let armorColor = ARMOR_COLORS[Math.floor(Math.random() * ARMOR_COLORS.length)]
     let color = SKIN_TONES[Math.floor(Math.random() * SKIN_TONES.length)]
     let health = this.props.characters.find(c => c.role === role).health
     return {
+      id: id,
       name: name,
       armor_color: armorColor,
       color: color,
@@ -52,23 +53,23 @@ class Encounter extends React.Component {
     let enemyArr = []
     switch(terrain) {
       case 'M':
-        enemyArr.push(this.makeEnemy('Cleric'))
+        enemyArr.push(this.makeEnemy('Cleric', 1))
         break;
       case 'F':
-        enemyArr.push(this.makeEnemy('Knight'))
+        enemyArr.push(this.makeEnemy('Knight', 1))
         break;
       case 'S':
-        enemyArr.push(this.makeEnemy('Mage'))
+        enemyArr.push(this.makeEnemy('Mage', 1))
         break;
       case 'W':
-        enemyArr.push(this.makeEnemy('Rogue'))
+        enemyArr.push(this.makeEnemy('Rogue', 1))
         break;
     }
 
     const enemyTypes = ['Cleric', 'Knight', 'Mage', 'Rogue']
 
     for (let i=0; i<(num-1); i++) {
-      enemyArr.push(this.makeEnemy(enemyTypes[Math.floor(Math.random() * 4)]))
+      enemyArr.push(this.makeEnemy(enemyTypes[Math.floor(Math.random() * 4)], i + 2))
     }
 
     this.props.setEnemies(enemyArr)

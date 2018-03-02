@@ -1,5 +1,5 @@
 class PartiesController < ApplicationController
-
+  before_action :authorize_user!
 
   def create
     party = Party.create(name: params[:party][:name], user_id: params[:party][:user_id], gold: 1000)
@@ -16,8 +16,6 @@ class PartiesController < ApplicationController
   def update
     party = Party.find(params[:id])
 
-    byebug
-
     if party_params
       party.update(party_params)
     end
@@ -28,6 +26,11 @@ class PartiesController < ApplicationController
       pc.party = party
       pc.character = char
       pc.save
+    end
+
+    if map_params
+      pm = PartyMap.find(map_params[:id])
+      pm.update(map_params)
     end
 
     if params[:item]
@@ -73,5 +76,16 @@ class PartiesController < ApplicationController
         params.require(:recruit).permit(:name, :role, :health, :max_health, :mana, :armor_color, :armor, :color)
       end
     end
+
+    def map_params
+      if params[:map]
+        params.require(:map).permit(:current_square, :moves, :complete, :visited, :id)
+      end
+    end
+
+    # t.string :visited
+    # t.boolean :complete, default: false
+    # t.integer :moves, default: 0
+    # t.string :current_square, default: "00"
 
 end
