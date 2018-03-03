@@ -59,9 +59,10 @@ export default (state = {
         ...state,
         party: {
           ...state.party,
-          members: action.party.party_characters
+          members: action.party.party.party_characters
         },
-        gold: action.gold
+        gold: action.party.party.gold,
+        maps: action.party.maps
       }
 
     case 'CREATE_MAP':

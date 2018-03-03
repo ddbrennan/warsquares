@@ -30,7 +30,7 @@ export default (state = {
       return {...state, currentMap: action.id, questing: true}
 
     case 'RESOLVE_ENCOUNTER':
-      let cs = action.party.party_maps.find(pm => pm.map_id === state.currentMap).current_square
+      let cs = action.party.party.party_maps.find(pm => pm.map_id === state.currentMap).current_square
       return {...state, questing: true, encounter: false, enemyArr: [], enemies: "", selectedSquare: [parseInt(cs[0]), parseInt(cs[1])]}
 
     case 'STOP_QUESTING':

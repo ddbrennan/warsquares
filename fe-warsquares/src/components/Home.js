@@ -6,17 +6,14 @@ import { connect } from 'react-redux'
 class Home extends React.Component {
 
   render() {
+
     return (
       <div>
-        { !this.props.auth.isLoggedIn ?
           <div>
             <div>Home</div>
             <Link to="/login">Sign In</Link>
             <Link to="/signup">Sign Up</Link>
           </div>
-        :
-          <Redirect to="/party" />
-        }
       </div>
     )
   }

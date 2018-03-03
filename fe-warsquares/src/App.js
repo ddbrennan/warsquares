@@ -13,6 +13,7 @@ import { bindActionCreators } from 'redux'
 import { logIn, logOut } from './actions'
 import { withRouter } from "react-router-dom"
 import { Link } from 'react-router-dom'
+import authorize from './components/hoc/authorize'
 
 
 
@@ -35,8 +36,14 @@ class App extends Component {
     this.props.logOut()
   }
 
-
   render() {
+    const AuthBattlefield = authorize(Battlefield);
+    const AuthStore = authorize(Store);
+    const AuthParty = authorize(Party);
+    const AuthBattle = authorize(Battle);
+
+    console.log("whole app rerendering")
+
     return (
       <div className="App">
         {this.props.auth.isLoggedIn ? <button onClick={this.logout}>Logout</button> : null }
@@ -57,6 +64,7 @@ class App extends Component {
 
 
 const mapStateToProps = (state) => {
+
   return {
     auth: {
       isLoggedIn: state.auth.isLoggedIn,
@@ -73,49 +81,3 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
-
-  // render() {
-  //   const AuthLoginForm = authorize(LoginForm);
-  //   const AuthProfile = authorize(Profile);
-  //   console.log(this.props);
-  //   return (
-  //     <div className="App">
-  //       <Navigation />
-  //       <Switch>
-  //         ...
-  //         <Route exact path="/profile" component={AuthProfile} />
-  //         <Route
-  //           exact
-  //           path="/login"
-  //           render={props => <AuthLoginForm onSubmit={this.logIn} {...props} />}
-  //         />
-  //         <Redirect to="/" />
-  //       </Switch>
-  //       ...
-  //     </div>
-  //   );
-  // }
-
-//   import React from "react";
-// import { Redirect } from "react-router-dom";
-// const authorize = RenderedComponent => {
-//   return class extends React.Component {
-//     render() {
-//       console.log(this.props);
-//       if (
-//         localStorage.getItem("jwt") &&
-//         this.props.location.pathname === "/login"
-//       ) {
-//         return <Redirect to="/" />;
-//       } else if (
-//         !localStorage.getItem("jwt") &&
-//         this.props.location.pathname !== "/login"
-//       ) {
-//         return <Redirect to="/login" />;
-//       } else {
-//         return <RenderedComponent />;
-//       }
-//     }
-//   };
-// };
-// export default authorize;

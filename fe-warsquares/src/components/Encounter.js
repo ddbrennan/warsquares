@@ -1,12 +1,14 @@
 import React from "react";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { setEnemies } from '../actions'
+import { setEnemies, resolveEncounter } from '../actions'
 import { Link } from 'react-router-dom'
 import Battle from './Battle'
 import {NAME_ARRAY} from '../resources/names.js'
 import {ARMOR_COLORS} from '../resources/armorcolors.js'
 import {SKIN_TONES} from '../resources/skintones.js'
+import PartyAdapter from "../api/PartyAdapter"
+
 
 
 class Encounter extends React.Component {
@@ -16,13 +18,17 @@ class Encounter extends React.Component {
 
   //should calc bribe money
   calculateBribe = () => {
-    // some number times coordinates of the square times number of enemies
-    return 100
+      let bribe = 200 * (this.props.square[0] + this.props.square[1]) * this.props.enemyArr.length
+      return bribe
   }
 
   bribe = () => {
-    console.log("bribing")
-    //check if you have enough gold, if yes then resolve the encounter
+    console.log("attempting bribe")
+    console.log(this.calculateBribe(), this.props.gold)
+    if (this.props.gold >= this.calculateBribe()) {
+      console.log("resolving encounter")
+        this.resolveEncounter()
+    }
   }
 
   componentWillMount = () => {
@@ -75,34 +81,77 @@ class Encounter extends React.Component {
     this.props.setEnemies(enemyArr)
   }
 
-  //should only trigger if enemies is > 0
+  resolveEncounter = () => {
+    let goldPaid = this.calculateBribe()
+    let moveCount = this.props.map.info.moves + 1
+    let complete = false
+
+    let recruit = this.props.enemyArr[0]
+    let currentSquare = this.props.square.join("")
+
+    let visId = [this.props.square[0] + this.props.square[1]*Math.sqrt(this.props.map.info.visited.length)]
+    let newVis = this.props.map.info.visited.split("")
+    newVis[visId] = 1
+    let visited = newVis.join("")
+
+    if (this.props.map.map.layout.match(/.{2}/g)[visId][0] === "C") {
+      complete = true
+    }
+
+    PartyAdapter.updateParty(this.props.partyId, {
+      recruit: recruit,
+      gold: this.props.gold - goldPaid,
+      map: {
+        current_square: currentSquare,
+        visited: visited,
+        moves: moveCount,
+        complete: complete,
+        id: this.props.map.info.id
+      }
+    })
+       .then(this.props.resolveEncounter)
+  }
+
+  isntCastle = () => {
+    let visId = [this.props.selectedSquare[0] + this.props.selectedSquare[1]*Math.sqrt(this.props.map.info.visited.length)]
+    let notCastle = this.props.map.map.layout.match(/.{2}/g)[visId][0] !== "C"
+    return notCastle
+  }
+
   render() {
     return (
       <div>
         <h2>ENCOUNTER!</h2>
-        {this.props.enemyArr.length ? <p>It's a {this.props.enemyArr[0].role} and {this.props.enemyArr.length - 1} allies!</p> : null}
-        <ul>
-          <li onClick={this.bribe}>Bribe for {this.calculateBribe()}</li>
+        {this.props.enemyArr.length ? <p>It's a {this.props.enemyArr[0].role}{!!(this.props.enemyArr.length - 1) ? ` and ${this.props.enemyArr.length - 1} allies` : null}!</p> : null}
+          {this.isntCastle ? <p onClick={this.bribe}>Bribe for {this.calculateBribe()}</p> : null }
           <Link to="/battle">Battle Them!</Link>
-          { this.props.tabard && <li>Recruit</li>}
-        </ul>
       </div>
     )
   }
  }
 
 const mapStateToProps = (state) => {
+  let map = []
+  if (state.party.maps.length) {
+    map = state.party.maps.find(m => m.map.id === state.gameLogic.currentMap)
+  }
+
   return {
     enemies: state.gameLogic.enemies,
     tabard: state.gameLogic.hasTabard,
     enemyArr: state.gameLogic.enemyArr,
-    characters: state.party.characters
+    characters: state.party.characters,
+    square: state.gameLogic.selectedSquare,
+    gold: state.party.gold,
+    map: map,
+    partyId: state.party.party.id
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    setEnemies: setEnemies
+    setEnemies: setEnemies,
+    resolveEncounter: resolveEncounter
   }, dispatch)
 }
 

@@ -13,28 +13,12 @@ import CreateCharacter from './CreateCharacter'
 
 class Party extends React.Component {
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     if (this.props.auth.user) {
       PartyAdapter.getUserParty(this.props.auth.user.id)
         .then(this.props.importParty)
       }
   }
-
-  //party members
-  // name
-  // class, colors
-  // stats
-  // equipment
-
-  // INVENTORY
-
-  //allow equipping
-
-  //  all items you own that aren't equipped
-
-  // gold
-
-
 
   mapMembers = () => {
     if (this.props.party.members) {
@@ -43,7 +27,6 @@ class Party extends React.Component {
   }
 
   mapEquipment = () => {
-    console.log("Equipment: ", this.props.party.equipment)
     if (this.props.party.equipment) {
       return this.props.party.equipment.map(e => {
         let equip = this.props.party.equipmentAll.find(item => item.id === e.equipment_id)
@@ -57,12 +40,9 @@ class Party extends React.Component {
       .then(this.props.deleteParty)
   }
 
-
-
   render() {
     return (
-      <div>
-        {this.props.auth.isLoggedIn ?
+
           <div>
             { this.props.party.name ?
               <div>
@@ -87,15 +67,13 @@ class Party extends React.Component {
               <CreateCharacter />
               }
           </div>
-          :
-          <Redirect to="/home"/>
-        }
-      </div>
     )
   }
  }
 
+
  const mapStateToProps = (state) => {
+
    return {
      auth: {
        isLoggedIn: state.auth.isLoggedIn,

@@ -37,21 +37,25 @@ class GridMap extends React.Component {
   //Should move in correct direction
   handleKeyPress = (e) => {
     switch(e.which) {
+      //up
       case 87:
       case 38:
-        this.movePiece(0, -1)
+        this.movePiece(1, 0)
         break;
+      //left
       case 65:
       case 37:
-        this.movePiece(-1, 0)
+        this.movePiece(0, -1)
         break;
+      //down
       case 83:
       case 40:
-        this.movePiece(0, 1)
+        this.movePiece(-1, 0)
         break;
+      //right
       case 68:
       case 39:
-        this.movePiece(1, 0)
+        this.movePiece(0, 1)
     }
   }
 

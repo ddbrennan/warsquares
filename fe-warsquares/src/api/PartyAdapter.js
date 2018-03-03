@@ -27,7 +27,8 @@ class PartyAdapter {
 
   static deleteParty(id) {
     return fetch(`${baseUrl}/parties/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: headers()
     }).then(res => res.json())
   }
 }

@@ -37,7 +37,13 @@ class PartiesController < ApplicationController
       party.equipments << Equipment.find(params[:item][:id])
     end
 
-    render json: party
+    maps = party.party_maps.map { |map| {map: map.map, info: map} }
+
+    serialized_data = ActiveModelSerializers::Adapter::Json.new(PartySerializer.new(party)).serializable_hash
+
+    json_return = serialized_data.merge({maps: maps})
+
+    render json: json_return
   end
 
 

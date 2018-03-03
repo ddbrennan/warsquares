@@ -107,7 +107,8 @@ class Battle extends React.Component {
   }
 
   evaluateDice = () => {
-    let weapon = this.props.party.inventory.find(i => i.owner_id === this.state.combatants[this.state.currentTurn].id)
+    let activeChar = this.state.combatants[this.state.currentTurn]
+    let weapon = this.props.party.inventory.find(i => i.owner_id === activeChar.id)
 
     if (weapon) {
       let stats = this.props.party.allEquipment.find(e => e.id === weapon.equipment_id)
@@ -123,9 +124,13 @@ class Battle extends React.Component {
       damage: evalRolls.sword
     })
     // heal active character
-    this.state.combatants[this.state.currentTurn].health += evalRolls.heart
+    if (activeChar.health + evalRolls.heart < activeChar.max_health) {
+      activeChar.health += evalRolls.heart
+    } else {
+      activeChar.health = activeChar.max_health
+    }
     // add mana to mana pool (persists for fight)
-    this.state.combatants[this.state.currentTurn].mana += evalRolls.mana
+    activeChar.mana += evalRolls.mana
   }
 
   startSpellcasting = () => {
@@ -160,11 +165,25 @@ class Battle extends React.Component {
 
     this.state.combatants[this.state.currentTurn].health += hearts
 
-    //iterate through allies
-    //find knight, if not find lowest health
-    // damage as appropriate
-    // damage aims at knight then the lowest HP
+    let targets = this.props.allies.sort((a, b) => a.health - b.health)
+
+    for (let i = 0; i < swords; i++) {
+      let target = this.getTarget(targets)
+      console.log("Attacking ", target.name)
+      this.state.combatants.find(c => c === target).health -= 1
+      if (!this.pcAlive()) {
+        this.resolveBattle()
+      }
+    }
     this.passTurn()
+  }
+
+  getTarget(targets) {
+    let target = targets.find(t => t.role === "Knight" && t.health > 0)
+    if (!target) {
+      target = targets.find(t => t.health > 0)
+    }
+    return target
   }
 
   endSpellcasting = () => {
@@ -183,7 +202,11 @@ class Battle extends React.Component {
       currentTurn = 0
     }
 
-    this.setState({ currentTurn }, this.takeTurns)
+    this.setState({
+      currentTurn: currentTurn,
+      rolls: [],
+      locked: {0: false, 1: false, 2: false, 3: false, 4: false, 5: false}
+    }, this.takeTurns)
   }
 
   rollDice = (rolls = 6) => {
@@ -271,13 +294,29 @@ class Battle extends React.Component {
 
   applyDamage = enemy => {
     if (enemy.health > 0 && !!this.state.damage) {
-        this.props.damageEnemy(enemy)
+        this.state.combatants.find(c => c === enemy).health -= 1
         let damage = this.state.damage - 1
         let spellcasting = !!damage ? false : true
         this.setState({
           damage: damage,
           spellcasting: spellcasting
         })
+    }
+    if (!this.npcAlive()) {
+      this.resolveBattle()
+    }
+  }
+
+  renderSpell = () => {
+    switch(this.state.combatants[this.state.currentTurn].role) {
+      case 'Knight':
+        return <div>Knight Spell</div>
+      case 'Cleric':
+        return <div>Cleric Spell</div>
+      case 'Rogue':
+        return <div>Rogue Spell</div>
+      case 'Mage':
+        return <div>Mage Spell</div>
     }
   }
 
@@ -320,13 +359,14 @@ class Battle extends React.Component {
                   {!!this.state.damage ?
                     <div>
                       <div>Click people to damage them.</div>
-                      <button onClick={this.startSpellcasting}>Done</button>
+                      <h3>Remaining Damage: {this.state.damage}</h3>
                     </div>
                     :
                     null
                   }
                   {this.state.spellcasting ?
                     <div>
+                      {this.renderSpell()}
                       <button onClick={this.endSpellcasting}>Done</button>
                     </div>
                     :

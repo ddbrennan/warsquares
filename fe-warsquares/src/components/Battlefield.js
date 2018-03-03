@@ -18,7 +18,7 @@ class Battlefield extends React.Component {
   render() {
     return (
       <div>
-        { this.props.auth.isLoggedIn && this.props.questing ?
+        { this.props.questing ?
           <div>
             <div>Battlefield</div>
             <Link to="/party">Party</Link>
@@ -37,6 +37,7 @@ class Battlefield extends React.Component {
 
 
  const mapStateToProps = (state) => {
+   console.log("encounter: ", state.gameLogic.encounter)
    let character = {}
    if (state.party.party.members) {
      character = {

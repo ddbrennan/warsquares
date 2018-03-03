@@ -29,55 +29,52 @@ class MapDisplay extends React.Component {
 
   createMap = (e) => {
     e.preventDefault()
+    
+    if (this.state.width && this.state.name) {
 
-    let beforeConstruction = performance.now()
+      const tiles = ["F", "M", "S", "W"]
+      let width = this.state.width
+      let mapLayout = "F0"
+      let tile = ""
 
-    const tiles = ["F", "M", "S", "W"]
-    let width = this.state.width
-    let mapLayout = "F0"
-    let tile = ""
+      let castle = Array(((width-1)*width)/2).fill("N")
+      castle[Math.floor(Math.random() * castle.length)] = "C"
 
-    let castle = Array(((width-1)*width)/2).fill("N")
-    castle[Math.floor(Math.random() * castle.length)] = "C"
+      for (let x = 0; x < width; x++) {
+        for (let y = 0; y < width; y++) {
 
-    for (let x = 0; x < width; x++) {
-      for (let y = 0; y < width; y++) {
+          let type = tiles[Math.floor(Math.random() * 4)]
+          let num = Math.floor(Math.random() * 2) + 1
 
-        let type = tiles[Math.floor(Math.random() * 4)]
-        let num = Math.floor(Math.random() * 3)
-
-        if (x+y < width && x+y > width/2) {
-          num += 3
-        } else if (x+y >= width) {
-          num += 6
-          if (castle.pop() === "C") {
-            type = "C"
-            num = 9
+          if (x+y < width && x+y > width/2) {
+            num += 3
+          } else if (x+y >= width) {
+            num += 6
+            if (castle.pop() === "C") {
+              type = "C"
+              num = 9
+            }
+          }
+          if (x+y > 0) {
+            mapLayout += (type + num)
           }
         }
-        if (x+y > 0) {
-          mapLayout += (type + num)
-        }
       }
+
+      let visited = "1"
+      for (let i = 0; i < (mapLayout.length/2 - 1); i++) {
+        visited += "0"
+      }
+
+      MapsAdapter.createMap({name: this.state.name, layout: mapLayout, visited: visited, party_id: this.props.id})
+        .then(this.props.createMap)
+      // this.props.createMap(this.state.name, mapLayout)
+
+      this.setState({
+        name: "",
+        width: ""
+      })
     }
-
-    let visited = "1"
-    for (let i = 0; i < (mapLayout.length/2 - 1); i++) {
-      visited += "0"
-    }
-
-    MapsAdapter.createMap({name: this.state.name, layout: mapLayout, visited: visited, party_id: this.props.id})
-      .then(this.props.createMap)
-    // this.props.createMap(this.state.name, mapLayout)
-
-    this.setState({
-      name: "",
-      width: ""
-    })
-
-    let afterConstruction = performance.now()
-
-    console.log(afterConstruction - beforeConstruction)
   }
 
   handleChange = (e) => {
