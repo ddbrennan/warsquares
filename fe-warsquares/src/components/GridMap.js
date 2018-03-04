@@ -60,7 +60,7 @@ class GridMap extends React.Component {
   }
 
   movePiece = (xChange, yChange) => {
-    if (!this.props.encounter) {
+    if (!this.props.encounter && !this.props.complete) {
       this.props.selectSquare(xChange, yChange, this.state.width)
     }
   }
@@ -87,7 +87,8 @@ class GridMap extends React.Component {
 
  const mapStateToProps = (state) => {
    return {
-     encounter: state.gameLogic.encounter
+     encounter: state.gameLogic.encounter,
+     complete: state.party.maps.find(pm => pm.map.id === state.gameLogic.currentMap).info.complete
    }
  }
 

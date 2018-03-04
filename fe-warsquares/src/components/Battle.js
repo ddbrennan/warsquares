@@ -317,16 +317,36 @@ class Battle extends React.Component {
     }
   }
 
+  knightSpell = () => {
+    //check if there's enough mana
+    //deal 1 damage to every opponent
+  }
+
+  clericSpell = () => {
+    //check if there's enough mana
+    //use damage logic on allies to heal
+  }
+
+  rogueSpell = () => {
+    //check if there's enough mana
+    //enter turn logic again
+  }
+
+  mageSpell = () => {
+    //uses all mana
+    //deals mana squared damage to 1 opponent
+  }
+
   renderSpell = () => {
     switch(this.state.combatants[this.state.currentTurn].role) {
       case 'Knight':
-        return <div><button>Knight Spell</button></div>
+        return <div><button onClick={this.knightSpell}>Whirlwind - 3 Mana</button></div>
       case 'Cleric':
-        return <div><button>Cleric Spell</button></div>
+        return <div><button onClick={this.clericSpell}>Minor Heal - 1 Mana</button></div>
       case 'Rogue':
-        return <div><button>Rogue Spell</button></div>
+        return <div><button onClick={this.rogueSpell}>Smoke Bomb - 4 Mana</button></div>
       case 'Mage':
-        return <div><button>Mage Spell</button></div>
+        return <div><button onClick={this.mageSpell}>Fireball - All Mana</button></div>
     }
   }
 

@@ -25,6 +25,11 @@ class Battlefield extends React.Component {
             <h2>{this.props.map.info.moves}</h2>
           { this.props.encounter && <Encounter />}
           <GridMap map={this.props.map} />
+          {this.props.map.info.complete ?
+            <div>Congratulations! You Captured the Castle</div>
+            :
+            null
+          }
           </div>
         :
           <Redirect to="/party" />

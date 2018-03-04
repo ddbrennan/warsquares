@@ -14,7 +14,8 @@ import CreateCharacter from './CreateCharacter'
 class Party extends React.Component {
   state = {
     editing: false,
-    name: this.props.party.name
+    name: this.props.party.name,
+    heldEquipment: ""
   }
 
   componentDidMount = () => {
@@ -30,17 +31,42 @@ class Party extends React.Component {
         return (<div className="party-display-char">
                   <Character key={m.id} character={m} />
                   <h3> {m.name} </h3>
+                  <div onClick={this.equipItem} id={`${m.id}member`}>Inventory</div>
                 </div>)
               })
     }
   }
 
+  equipItem = (e) => {
+    let oldEquip = this.props.party.equipment.find(item => item.owner_id === parseInt(e.target.id))
+    if (oldEquip) {
+      oldEquip.owner_id = null
+    }
+
+    let newEquip = this.props.party.equipment.find(item => item.id === parseInt(this.state.heldEquipment))
+    newEquip.owner_id = parseInt(e.target.id)
+    newEquip.update = true
+
+    this.setState({
+      heldEquipment: ""
+    })
+
+    //send info to DB
+    PartyAdapter.updateParty(this.props.party.id, {item: newEquip, gold: this.props.party.gold})
+  }
+
+  pickUpItem = (e) => {
+    this.setState({
+      heldEquipment: e.target.id
+    })
+  }
 
   mapEquipment = () => {
     if (this.props.party.equipment) {
       return this.props.party.equipment.map(e => {
         let equip = this.props.party.equipmentAll.find(item => item.id === e.equipment_id)
-        return <div className="party-equipment-display">{equip.name}</div>
+        let user = this.props.party.members.find(member => member.id === e.owner_id)
+        return <div onClick={this.pickUpItem} id={`${e.id}equip`} className="party-equipment-display">{equip.name} equipped to {user ? user.name : "no one"}</div>
       })
     }
   }

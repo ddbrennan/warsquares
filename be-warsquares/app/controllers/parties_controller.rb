@@ -14,7 +14,6 @@ class PartiesController < ApplicationController
 
 
   def update
-
     party = Party.find(params[:id])
 
     if party_params
@@ -39,8 +38,21 @@ class PartiesController < ApplicationController
       end
     end
 
-    if params[:item]
-      party.equipments << Equipment.find(params[:item][:id])
+    if item_params
+      if item_params[:update]
+        # find one with old owner id, reset it
+        oldEquip = PartyEquipment.find_by(owner_id: item_params[:owner_id], party_id: item_params[:party_id])
+        if oldEquip
+          oldEquip.owner_id = 0
+          oldEquip.save
+        end
+        # find current equip, switch owner id
+        newEquip = PartyEquipment.find(item_params[:id])
+        newEquip.owner_id = item_params[:owner_id]
+        newEquip.save
+      else
+        party.equipments << Equipment.find(item_params[:equipment_id])
+      end
     end
 
     maps = party.party_maps.map { |map| {map: map.map, info: map} }
@@ -94,6 +106,12 @@ class PartiesController < ApplicationController
     def map_params
       if params[:map]
         params.require(:map).permit(:current_square, :moves, :complete, :visited, :id, :delete)
+      end
+    end
+
+    def item_params
+      if params[:item]
+        params.require(:item).permit(:id, :owner_id, :equipment_id, :update, :party_id)
       end
     end
 

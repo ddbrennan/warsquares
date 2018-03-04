@@ -15,7 +15,7 @@ class Equipment extends React.Component {
   purchaseItem = () => {
     if (!this.checkOwnership() && this.props.gold > this.props.equipment.cost ) {
       console.log("making order")
-      PartyAdapter.updateParty(this.props.partyId, {item: this.props.equipment, gold: this.props.gold - this.props.equipment.cost})
+      PartyAdapter.updateParty(this.props.partyId, {item: {equipment_id: this.props.equipment.id}, gold: this.props.gold - this.props.equipment.cost})
         .then(this.props.importParty)
     }
   }
