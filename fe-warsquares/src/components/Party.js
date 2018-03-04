@@ -4,7 +4,7 @@ import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PartyAdapter from "../api/PartyAdapter"
-import { importParty, deleteParty } from '../actions'
+import { importParty, deleteParty, updateParty } from '../actions'
 import Character from './Character'
 import MapDisplay from './MapDisplay'
 import CreateCharacter from './CreateCharacter'
@@ -12,6 +12,10 @@ import CreateCharacter from './CreateCharacter'
 
 
 class Party extends React.Component {
+  state = {
+    editing: false,
+    name: this.props.party.name
+  }
 
   componentDidMount = () => {
     if (this.props.auth.user) {
@@ -22,9 +26,15 @@ class Party extends React.Component {
 
   mapMembers = () => {
     if (this.props.party.members) {
-      return this.props.party.members.map(m => <div className="party-display-char"><Character key={m.id} character={m} /></div>)
+      return this.props.party.members.map(m => {
+        return (<div className="party-display-char">
+                  <Character key={m.id} character={m} />
+                  <h3> {m.name} </h3>
+                </div>)
+              })
     }
   }
+
 
   mapEquipment = () => {
     if (this.props.party.equipment) {
@@ -40,6 +50,27 @@ class Party extends React.Component {
       .then(this.props.deleteParty)
   }
 
+  startEditing = () => {
+    this.setState({
+      editing: true
+    })
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      name: e.target.value
+    })
+  }
+
+  changeTeamName = (e) => {
+    e.preventDefault()
+    this.setState({
+      editing: false
+    })
+    PartyAdapter.updateParty(this.props.party.id, {name: this.state.name})
+      .then(this.props.importParty)
+  }
+
   render() {
     return (
 
@@ -49,8 +80,15 @@ class Party extends React.Component {
                 {!this.props.questing ?
                   <div>
                     <Link to="/store">Store</Link>
+                    {this.state.editing ?
+                      <form onSubmit={this.changeTeamName}>
+                        <input type="text" onChange={this.handleChange} value={this.state.name}></input>
+                        <input type="submit"></input>
+                      </form>
+                      :
+                      <h1 onClick={this.startEditing}>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
+                    }
 
-                    <h1>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
 
                       <MapDisplay />
 

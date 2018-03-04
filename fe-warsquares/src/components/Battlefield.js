@@ -23,7 +23,7 @@ class Battlefield extends React.Component {
             <div>Battlefield</div>
             <Link to="/party">Party</Link>
 
-
+            <h2>{this.props.map.info.moves}</h2>
           { this.props.encounter && <Encounter />}
           <GridMap map={this.props.map} />
           </div>

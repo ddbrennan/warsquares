@@ -125,6 +125,7 @@ class Encounter extends React.Component {
         {this.props.enemyArr.length ? <p>It's a {this.props.enemyArr[0].role}{!!(this.props.enemyArr.length - 1) ? ` and ${this.props.enemyArr.length - 1} allies` : null}!</p> : null}
           {this.isntCastle ? <p onClick={this.bribe}>Bribe for {this.calculateBribe()}</p> : null }
           <Link to="/battle">Battle Them!</Link>
+          {this.props.tabard ? <p>Attempt to Recruit</p>: null}
       </div>
     )
   }

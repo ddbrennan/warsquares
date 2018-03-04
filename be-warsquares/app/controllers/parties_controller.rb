@@ -14,6 +14,7 @@ class PartiesController < ApplicationController
 
 
   def update
+
     party = Party.find(params[:id])
 
     if party_params
@@ -29,8 +30,13 @@ class PartiesController < ApplicationController
     end
 
     if map_params
+
       pm = PartyMap.find(map_params[:id])
-      pm.update(map_params)
+      if map_params[:delete]
+        pm.destroy
+      else
+        pm.update(map_params)
+      end
     end
 
     if params[:item]
@@ -74,7 +80,7 @@ class PartiesController < ApplicationController
   private
 
     def party_params
-      params.require(:party).permit(:gold)
+      params.require(:party).permit(:gold, :name)
     end
 
     def recruit_params
@@ -85,7 +91,7 @@ class PartiesController < ApplicationController
 
     def map_params
       if params[:map]
-        params.require(:map).permit(:current_square, :moves, :complete, :visited, :id)
+        params.require(:map).permit(:current_square, :moves, :complete, :visited, :id, :delete)
       end
     end
 

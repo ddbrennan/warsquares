@@ -120,9 +120,6 @@ class Battle extends React.Component {
       evalRolls[face] += 1
     }
     //add damage to pool
-    this.setState({
-      damage: evalRolls.sword
-    })
     // heal active character
     if (activeChar.health + evalRolls.heart < activeChar.max_health) {
       activeChar.health += evalRolls.heart
@@ -131,6 +128,14 @@ class Battle extends React.Component {
     }
     // add mana to mana pool (persists for fight)
     activeChar.mana += evalRolls.mana
+
+    this.setState({
+      damage: evalRolls.sword
+    })
+
+    if (evalRolls.sword === 0) {
+      this.startSpellcasting()
+    }
   }
 
   startSpellcasting = () => {
@@ -169,11 +174,12 @@ class Battle extends React.Component {
 
     for (let i = 0; i < swords; i++) {
       let target = this.getTarget(targets)
-      console.log("Attacking ", target.name)
-      this.state.combatants.find(c => c === target).health -= 1
-      if (!this.pcAlive()) {
-        this.resolveBattle()
+      if (target) {
+        this.state.combatants.find(c => c === target).health -= 1
       }
+    }
+    if (!this.pcAlive()) {
+      this.resolveBattle()
     }
     this.passTurn()
   }
@@ -259,7 +265,7 @@ class Battle extends React.Component {
   //ALL CHARACTER ON ONE SIDE DEAD
   resolveBattle = () => {
     let reward = this.state.combatants.filter(c => (!c.party_id && c.health < 1)).length * 100
-    let recruit = {}
+    let recruit
     let currentSquare = this.props.previousSquare.join("")
     let visited = this.props.map.info.visited
     let moveCount = this.props.map.info.moves + 1
@@ -278,17 +284,21 @@ class Battle extends React.Component {
       }
     }
 
-    PartyAdapter.updateParty(this.props.party.partyId, {
-      recruit: recruit,
-      gold: this.props.gold + reward,
-      map: {
-        current_square: currentSquare,
-        visited: visited,
-        moves: moveCount,
-        complete: complete,
-        id: this.props.map.info.id
-      }
-    })
+    let partyUpdate = {}
+    let map = {
+      current_square: currentSquare,
+      visited: visited,
+      moves: moveCount,
+      complete: complete,
+      id: this.props.map.info.id
+    }
+    partyUpdate.map = map
+    if (recruit) {
+      partyUpdate.recruit = recruit
+    }
+    partyUpdate.gold = this.props.gold + reward
+
+    PartyAdapter.updateParty(this.props.party.partyId, partyUpdate)
        .then(this.props.resolveEncounter)
   }
 
@@ -310,13 +320,13 @@ class Battle extends React.Component {
   renderSpell = () => {
     switch(this.state.combatants[this.state.currentTurn].role) {
       case 'Knight':
-        return <div>Knight Spell</div>
+        return <div><button>Knight Spell</button></div>
       case 'Cleric':
-        return <div>Cleric Spell</div>
+        return <div><button>Cleric Spell</button></div>
       case 'Rogue':
-        return <div>Rogue Spell</div>
+        return <div><button>Rogue Spell</button></div>
       case 'Mage':
-        return <div>Mage Spell</div>
+        return <div><button>Mage Spell</button></div>
     }
   }
 
