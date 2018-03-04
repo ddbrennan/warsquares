@@ -113,8 +113,9 @@ class Encounter extends React.Component {
   }
 
   isntCastle = () => {
-    let visId = [this.props.selectedSquare[0] + this.props.selectedSquare[1]*Math.sqrt(this.props.map.info.visited.length)]
+    let visId = [this.props.square[0] + this.props.square[1]*Math.sqrt(this.props.map.info.visited.length)]
     let notCastle = this.props.map.map.layout.match(/.{2}/g)[visId][0] !== "C"
+    console.log("Not Castle: ", visId, notCastle)
     return notCastle
   }
 
@@ -123,9 +124,9 @@ class Encounter extends React.Component {
       <div>
         <h2>ENCOUNTER!</h2>
         {this.props.enemyArr.length ? <p>It's a {this.props.enemyArr[0].role}{!!(this.props.enemyArr.length - 1) ? ` and ${this.props.enemyArr.length - 1} allies` : null}!</p> : null}
-          {this.isntCastle ? <p onClick={this.bribe}>Bribe for {this.calculateBribe()}</p> : null }
+          {this.isntCastle() ? <p onClick={this.bribe}>Bribe for {this.calculateBribe()}</p> : null }
           <Link to="/battle">Battle Them!</Link>
-          {this.props.tabard ? <p>Attempt to Recruit</p>: null}
+          {this.props.tabard && this.isntCastle() ? <p>Attempt to Recruit</p>: null}
       </div>
     )
   }
@@ -139,7 +140,7 @@ const mapStateToProps = (state) => {
 
   return {
     enemies: state.gameLogic.enemies,
-    tabard: state.gameLogic.hasTabard,
+    tabard: state.gameLogic.tabard,
     enemyArr: state.gameLogic.enemyArr,
     characters: state.party.characters,
     square: state.gameLogic.selectedSquare,

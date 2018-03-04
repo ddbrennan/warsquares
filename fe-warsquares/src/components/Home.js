@@ -9,11 +9,15 @@ class Home extends React.Component {
 
     return (
       <div>
-          <div>
-            <div>Home</div>
-            <Link to="/login">Sign In</Link>
-            <Link to="/signup">Sign Up</Link>
-          </div>
+          {this.props.auth.isLoggedIn ?
+            <Redirect to="/party"></Redirect>
+          :
+            <div>
+              <div>Home</div>
+              <Link to="/login">Sign In</Link>
+              <Link to="/signup">Sign Up</Link>
+            </div>
+          }
       </div>
     )
   }

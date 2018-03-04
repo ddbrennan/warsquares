@@ -15,7 +15,7 @@ class MapItem extends React.Component {
 
     return (
       <div>
-        <div onClick={() => this.props.enterBattle(this.props.map.id)}>
+        <div onClick={() => this.props.enterBattle(this.props.map.id, this.props.info.current_square)}>
           <h3>Map</h3>
           <div>Name: {this.props.map.name}</div>
           <div>Size: {Math.floor(Math.sqrt(this.props.info.visited.length))}</div>

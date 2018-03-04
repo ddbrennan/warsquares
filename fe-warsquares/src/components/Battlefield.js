@@ -10,7 +10,6 @@ import { stopQuesting } from '../actions'
 
 class Battlefield extends React.Component {
 
-  //will unmount switch questing to false
   componentWillUnmount = () => {
     this.props.stopQuesting()
   }
@@ -28,7 +27,7 @@ class Battlefield extends React.Component {
           <GridMap map={this.props.map} />
           </div>
         :
-          <Redirect to="/home" />
+          <Redirect to="/party" />
         }
       </div>
     )

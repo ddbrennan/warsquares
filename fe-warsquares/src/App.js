@@ -41,6 +41,7 @@ class App extends Component {
     const AuthStore = authorize(Store);
     const AuthParty = authorize(Party);
     const AuthBattle = authorize(Battle);
+    const AuthHome = authorize(AuthHome);
 
     console.log("whole app rerendering")
 

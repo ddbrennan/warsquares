@@ -1,5 +1,5 @@
 import React from "react";
-import { purchaseItem } from '../actions'
+import { purchaseItem, importParty } from '../actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PartyAdapter from "../api/PartyAdapter"
@@ -7,7 +7,6 @@ import PartyAdapter from "../api/PartyAdapter"
 class Equipment extends React.Component {
 
   checkOwnership = () => {
-    console.log("props in check ownership: ", this.props)
     return !!this.props.owned.find(e => {
       return e.equipment_id === this.props.equipment.id
     })
@@ -15,8 +14,9 @@ class Equipment extends React.Component {
 
   purchaseItem = () => {
     if (!this.checkOwnership() && this.props.gold > this.props.equipment.cost ) {
+      console.log("making order")
       PartyAdapter.updateParty(this.props.partyId, {item: this.props.equipment, gold: this.props.gold - this.props.equipment.cost})
-        .then(res => this.props.purchaseItem(res.gold, res.party_equipments))
+        .then(this.props.importParty)
     }
   }
 
@@ -41,7 +41,8 @@ class Equipment extends React.Component {
 
  const mapDispatchToProps = (dispatch) => {
    return bindActionCreators({
-     purchaseItem: purchaseItem
+     purchaseItem: purchaseItem,
+     importParty: importParty
    }, dispatch)
  }
 

@@ -7,7 +7,6 @@ export default (state = {
 }, action) => {
   switch(action.type) {
     case 'IMPORT_PARTY':
-
       if (action.party.party) {
         const party = {
           name: action.party.party.name,

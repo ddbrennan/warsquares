@@ -3,7 +3,7 @@ export default (state = {
   previousSquare: [0,0],
   encounter: false,
   enemies: "",
-  hasTabard: false,
+  tabard: false,
   enemyArr: [],
   currentMap: null,
   questing: false
@@ -23,11 +23,18 @@ export default (state = {
     case 'START_ENCOUNTER':
       return {...state, encounter: true, enemies: action.tile}
 
+    case 'IMPORT_PARTY':
+      let tabardStatus = state.tabard
+      if (action.party.party) {
+        tabardStatus = !!action.party.party.party_equipments.find(pe => pe.equipment_id === 4)
+      }
+      return {...state, tabard: tabardStatus}
+
     case 'SET_ENEMIES':
       return {...state, enemyArr: action.enemyArr }
 
     case 'ENTER_BATTLE':
-      return {...state, currentMap: action.id, questing: true}
+      return {...state, currentMap: action.id, questing: true, selectedSquare: [parseInt(action.square[0]), parseInt(action.square[1])]}
 
     case 'RESOLVE_ENCOUNTER':
       let cs = action.party.party.party_maps.find(pm => pm.map_id === state.currentMap).current_square

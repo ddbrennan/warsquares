@@ -47,7 +47,9 @@ class PartiesController < ApplicationController
 
     serialized_data = ActiveModelSerializers::Adapter::Json.new(PartySerializer.new(party)).serializable_hash
 
-    json_return = serialized_data.merge({maps: maps})
+    general_info = {characters: Character.all, equipment: Equipment.all, maps: maps}
+
+    json_return = serialized_data.merge(general_info)
 
     render json: json_return
   end

@@ -73,38 +73,43 @@ class Party extends React.Component {
 
   render() {
     return (
+      <div>
+        {this.props.auth.isLoggedIn ?
+            <div>
+              { this.props.party.name ?
+                <div>
+                  {!this.props.questing ?
+                    <div>
+                      <Link to="/store">Store</Link>
 
-          <div>
-            { this.props.party.name ?
-              <div>
-                {!this.props.questing ?
-                  <div>
-                    <Link to="/store">Store</Link>
-                    {this.state.editing ?
-                      <form onSubmit={this.changeTeamName}>
-                        <input type="text" onChange={this.handleChange} value={this.state.name}></input>
-                        <input type="submit"></input>
+                      {this.state.editing ?
+                      <form>
+                        <input type="text" value={this.state.name} onChange={this.handleChange}></input>
+                        <input type="submit" onSubmit={this.changeTeamName}></input>
                       </form>
                       :
                       <h1 onClick={this.startEditing}>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
-                    }
-
+                      }
 
                       <MapDisplay />
 
-                    <div className="party-members">{this.mapMembers()}</div>
-                    <div className="inventory">{this.mapEquipment()}</div>
-                    <p>{this.props.gold}</p>
-                    <button onClick={this.deleteParty}>Delete Party</button>
-                  </div>
-                  :
-                  <Redirect to="/battlefield"></Redirect>
+                      <div className="party-members">{this.mapMembers()}</div>
+                      <div className="inventory">{this.mapEquipment()}</div>
+                      <p>Gold Available: {this.props.party.gold}</p>
+                      <button onClick={this.deleteParty}>Delete Party</button>
+                    </div>
+                    :
+                    <Redirect to="/battlefield"></Redirect>
+                  }
+                </div>
+                :
+                <CreateCharacter />
                 }
-              </div>
-              :
-              <CreateCharacter />
-              }
-          </div>
+            </div>
+          :
+            <Redirect to="/home"></Redirect>
+        }
+      </div>
     )
   }
  }
@@ -123,7 +128,7 @@ class Party extends React.Component {
        equipment: state.party.party.inventory,
        equipmentAll: state.party.equipment,
        id: state.party.party.id,
-       gold: state.party.party.gold
+       gold: state.party.gold
      },
      questing: state.gameLogic.questing
 

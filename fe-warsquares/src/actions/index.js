@@ -38,8 +38,8 @@ export function createMap(data) {
   return { type: 'CREATE_MAP', data: data }
 }
 
-export function enterBattle(id) {
-  return { type: 'ENTER_BATTLE', id: id }
+export function enterBattle(id, square) {
+  return { type: 'ENTER_BATTLE', id: id, square: square }
 }
 
 export function stopQuesting() {
