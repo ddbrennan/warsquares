@@ -6,12 +6,27 @@ import { bindActionCreators } from 'redux'
 import GridMap from './GridMap'
 import Encounter from './Encounter'
 import Character from './Character'
-import { stopQuesting } from '../actions'
+import { stopQuesting, resetMap } from '../actions'
+import PartyAdapter from "../api/PartyAdapter"
+
 
 class Battlefield extends React.Component {
 
   componentWillUnmount = () => {
     this.props.stopQuesting()
+  }
+
+  resetMap = () => {
+    let visited = "1"
+    for (let i = 1; i < this.props.map.info.visited.length; i++) {
+      visited += "0"
+    }
+    this.props.map.info.visited = visited
+    this.props.map.info.complete = false
+    this.props.map.info.current_square = "00"
+
+    PartyAdapter.updateParty(this.props.id, {map: this.props.map.info, gold: this.props.gold})
+      .then(this.props.resetMap)
   }
 
   render() {
@@ -26,7 +41,10 @@ class Battlefield extends React.Component {
           { this.props.encounter && <Encounter />}
           <GridMap map={this.props.map} />
           {this.props.map.info.complete ?
-            <div>Congratulations! You Captured the Castle</div>
+            <div>
+              <div>Congratulations! You Captured the Castle</div>
+              <button onClick={this.resetMap}>Reset the Map?</button>
+            </div>
             :
             null
           }
@@ -65,8 +83,10 @@ class Battlefield extends React.Component {
      map: map,
      encounter: state.gameLogic.encounter,
      character: character,
-     questing: state.gameLogic.questing
+     questing: state.gameLogic.questing,
+     id: state.party.party.id,
+     gold: state.party.gold
    }
  }
 
-export default connect(mapStateToProps, { stopQuesting })(Battlefield)
+export default connect(mapStateToProps, { stopQuesting, resetMap })(Battlefield)

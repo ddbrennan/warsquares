@@ -10,6 +10,10 @@ export function importParty(party) {
   return { type: 'IMPORT_PARTY', party: party }
 }
 
+export function resetMap(party) {
+  return { type: 'RESET_MAP', party: party }
+}
+
 export function selectSquare(x,y,width) {
   return { type: 'SELECT_SQUARE', change: {x: x, y: y, width: width} }
 }

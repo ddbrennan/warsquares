@@ -30,6 +30,9 @@ export default (state = {
       }
       return {...state, tabard: tabardStatus}
 
+    case 'RESET_MAP':
+      return {...state, selectedSquare: [0,0], previousSquare: [0,0]}
+
     case 'SET_ENEMIES':
       return {...state, enemyArr: action.enemyArr }
 

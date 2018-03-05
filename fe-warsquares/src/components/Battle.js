@@ -302,11 +302,21 @@ class Battle extends React.Component {
        .then(this.props.resolveEncounter)
   }
 
-  applyDamage = enemy => {
+  applyDamage = (enemy) => {
+    let amount = this.state.spellcasting ? this.state.damage : 1
+    
     if (enemy.health > 0 && !!this.state.damage) {
-        this.state.combatants.find(c => c === enemy).health -= 1
-        let damage = this.state.damage - 1
+        let target = this.state.combatants.find(c => c === enemy)
+        if (target.health - amount >= 0) {
+          target.health -= amount
+        } else {
+          target.health = 0
+        }
+
+        let damage = this.state.damage - amount
+
         let spellcasting = !!damage ? false : true
+
         this.setState({
           damage: damage,
           spellcasting: spellcasting
@@ -318,23 +328,38 @@ class Battle extends React.Component {
   }
 
   knightSpell = () => {
-    //check if there's enough mana
-    //deal 1 damage to every opponent
+    if (this.state.combatants[this.state.currentTurn].mana > 2) {
+      for (const combatant of this.state.combatants) {
+        if (!combatant.party_id && combatant.health > 0) {
+          combatant.health -= 1
+        }
+      }
+      this.state.combatants[this.state.currentTurn].mana -= 3
+      this.setState({})
+    }
   }
 
   clericSpell = () => {
-    //check if there's enough mana
-    //use damage logic on allies to heal
+    if (this.state.combatants[this.state.currentTurn].mana > 0) {
+      //heal an ally
+      this.state.combatants[this.state.currentTurn].mana -= 1
+    }
   }
 
   rogueSpell = () => {
-    //check if there's enough mana
-    //enter turn logic again
+    if (this.state.combatants[this.state.currentTurn].mana > 3) {
+      // repeat turn
+      this.state.combatants[this.state.currentTurn].mana -= 4
+    }
   }
 
   mageSpell = () => {
-    //uses all mana
-    //deals mana squared damage to 1 opponent
+    if (this.state.combatants[this.state.currentTurn].mana > 0) {
+      let mana = this.state.combatants[this.state.currentTurn].mana
+      let damage = mana * mana
+      this.state.combatants[this.state.currentTurn].mana = 0
+      this.setState({ damage })
+    }
   }
 
   renderSpell = () => {
