@@ -157,9 +157,7 @@ body {
 
 }
 
-.party-display-char {
-  width: 25%;
-}
+
 
 .rogue-standin {
   width: 80%;
@@ -197,6 +195,21 @@ body {
 /* TITLE SCREEN */
 #title-screen {
   text-align: center;
+  background: radial-gradient(#2F3437 0%, #000000 100%);
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+#title-graphic {
+  background-image: url("./images/title-02.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  margin: auto;
+  width: 65%;
+  height: 70%;
 }
 
 #title-screen h1 {
@@ -209,14 +222,118 @@ body {
 
 .auth-button {
   background-color: #d6ae8b;
-  width: 20%;
-  margin: 1% auto;
+  width: 40%;
+  margin: 1%;
   font-size: 1.5em;
   border: solid 5px black;
   padding: 1%;
+  float: left;
+  display: inline-block;
+}
+
+#auth-buttons {
+  width: 50%;
+  margin: auto;
 }
 
 .auth-button:hover {
   background-color: #d64e8b;
   border: solid 5px red;
+}
+
+/* PARTY PAGE */
+.store-link {
+  width: 200px;
+  height: 70px;
+  background: url('./images/storelink-02.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  margin: 2%;
+}
+
+a {
+  height: 100%;
+  width: 100%;
+}
+
+#party-container {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 5% 60% 30% 5%;
+  grid-template-rows: 10% 5% 60% 20% 5%;
+}
+
+.party-name {
+  font-size: 3em;
+  text-align: center;
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  border: solid 5px black;
+  height: 100%;
+}
+
+#map-container {
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 3;
+  grid-row-end: 5;
+  display: grid;
+  grid-template-rows: 75% 25%;
+}
+
+#map-list {
+  overflow: scroll;
+  border: solid 5px black;
+}
+
+#map-generator {
+  border: solid 5px black;
+
+}
+
+#party-members {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  overflow: scroll;
+  border: solid 5px black;
+}
+
+#inventory {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 4;
+  grid-row-end: 5;
+  border: solid 5px black;
+}
+
+.party-display-char {
+  display: inline-block;
+  width: 25%;
+  border: solid 5px black;
+  padding: 1%;
+}
+
+/* BATTLE */
+.battle-container {
+  display: grid;
+  grid-template-columns: 5% 40% 10% 40% 5%;
+  grid-template-rows: 5% 10% auto;
+  height: 100vh;
+}
+
+.allies-container {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+
+}
+
+.enemies-container {
+  grid-column-start: 4;
+  grid-column-end: 5;
+  grid-row-start: 3;
 }

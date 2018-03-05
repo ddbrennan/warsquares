@@ -11,12 +11,13 @@ class Home extends React.Component {
   render() {
     return (
       <div id="title-screen">
-        <h1>oinkedIn: First Blood</h1>
-        <h3>HogWild Edition</h3>
-        <div className="auth-button" onClick={() => this.setState({ status: "signing in"})}>Sign In</div>
-        {this.state.status === "signing in" ? <Login /> : null}
-        <div className="auth-button" onClick={() => this.setState({ status: "signing up"})}>Sign Up</div>
-        {this.state.status === "signing up" ? <SignUp /> : null}
+        <div id="title-graphic"></div>
+        <div id="auth-buttons">
+          <div className="auth-button" onClick={() => this.setState({ status: "signing in"})}>Sign In</div>
+          {this.state.status === "signing in" ? <Login /> : null}
+          <div className="auth-button" onClick={() => this.setState({ status: "signing up"})}>Sign Up</div>
+          {this.state.status === "signing up" ? <SignUp /> : null}
+        </div>
       </div>
     )
   }

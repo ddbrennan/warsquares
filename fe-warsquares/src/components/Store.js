@@ -16,8 +16,6 @@ class Store extends React.Component {
 
   render() {
     return (
-      <div>
-        { this.props.auth.isLoggedIn ?
           <div>
             <div>Store</div>
             <Link to="/party">Party</Link>
@@ -25,10 +23,6 @@ class Store extends React.Component {
             <h3>Available gold: {this.props.gold}</h3>
             { this.displayEquipment() }
           </div>
-        :
-          <Redirect to="/home" />
-        }
-      </div>
     )
   }
  }

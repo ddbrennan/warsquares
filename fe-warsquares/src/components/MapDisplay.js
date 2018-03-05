@@ -29,7 +29,7 @@ class MapDisplay extends React.Component {
 
   createMap = (e) => {
     e.preventDefault()
-    
+
     if (this.state.width && this.state.name) {
 
       const tiles = ["F", "M", "S", "W"]
@@ -85,22 +85,26 @@ class MapDisplay extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.listMaps()}
-        <h3>Generate New Map</h3>
-        <form onSubmit={this.createMap}>
-          <label>Name Your Map
-            <input type="text" name="name" value={this.state.name} onChange={this.handleChange}></input>
-          </label>
-          <select name="width" onChange={this.handleChange} value={this.state.width}>
-            <option disabled value="">SELECT A SIZE</option>
-            <option value="4">4 x 4</option>
-            <option value="5">5 x 5</option>
-            <option value="6">6 x 6</option>
-            <option value="7">7 x 7</option>
-          </select>
-          <input type="submit" value="Create Map"></input>
-        </form>
+      <div id="map-container">
+        <div id="map-list">
+          {this.listMaps()}
+        </div>
+        <div id="map-generator">
+          <h3>Generate New Map</h3>
+          <form onSubmit={this.createMap}>
+            <label>Name Your Map
+              <input type="text" name="name" value={this.state.name} onChange={this.handleChange}></input>
+            </label>
+            <select name="width" onChange={this.handleChange} value={this.state.width}>
+              <option disabled value="">SELECT A SIZE</option>
+              <option value="4">4 x 4</option>
+              <option value="5">5 x 5</option>
+              <option value="6">6 x 6</option>
+              <option value="7">7 x 7</option>
+            </select>
+            <input type="submit" value="Create Map"></input>
+          </form>
+        </div>
       </div>
     )
   }

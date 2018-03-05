@@ -100,11 +100,11 @@ class Battle extends React.Component {
   }
 
   addEquipment = (weapon) => {
-      let newRolls = [...this.state.rolls, ...Array(weapon.amount).fill("sword")] // ["sword","sword"]
+      let newRolls = [...this.state.rolls, ...Array(weapon.amount).fill(weapon.category)]
 
       this.setState({
         rolls: newRolls
-      })
+      }, this.evalRolls)
   }
 
   evaluateDice = () => {
@@ -114,8 +114,14 @@ class Battle extends React.Component {
     if (weapon) {
       let stats = this.props.party.allEquipment.find(e => e.id === weapon.equipment_id)
       this.addEquipment(stats)
+    } else {
+      this.evalRolls()
     }
+  }
 
+  evalRolls = () => {
+    console.log(this.state.rolls)
+    let activeChar = this.state.combatants[this.state.currentTurn]
     let evalRolls = {heart: 0, sword: 0, mana: 0}
     for (let face of this.state.rolls) {
       evalRolls[face] += 1
@@ -144,11 +150,6 @@ class Battle extends React.Component {
       spellcasting: true
     })
   }
-  // bring up menu based on class
-  // Knight - 1 damage to everyone
-  // Cleric - Heal Other Character (1 to 1)
-  // Mage - Exponential Damage (2 = 1 damage, 3 = 4 damage, 4 = 9 damage, 5 = 16 damage, 6 = 25 damage)
-  // Rogue - Extra Turn (4)
 
 
 
@@ -367,7 +368,9 @@ class Battle extends React.Component {
       this.setState({
         rolling: true,
         spellcasting: false,
-        rollCount: 0
+        rollCount: 0,
+        rolls: [],
+        locked: {0: false, 1: false, 2: false, 3: false, 4: false, 5: false}
       })
     }
   }
@@ -410,55 +413,54 @@ class Battle extends React.Component {
   //should redirect if there is no enemy array
   render() {
     return (
-      <div>
-        { this.props.auth.isLoggedIn ?
-          <div>
+          <div className="battle-container">
+            {this.state.rolling || this.state.damage || this.state.spellcasting || this.props.questing ?
+              null
+              :
+              <button onClick={this.takeTurns}>Start Battle</button>
+             }
 
+            <div className="allies-container">
+              {this.renderParty()}
+            </div>
+            <div className="enemies-container">
+              {this.renderEnemies()}
+            </div>
 
-                  <button onClick={this.takeTurns}>Start Battle</button>
-                  <div class="allies-container">
-                    {this.renderParty()}
-                  </div>
-                  <div class="enemies-container">
-                    {this.renderEnemies()}
-                  </div>
-                  {this.state.rolling && this.state.rollCount < 3 ?
-                    <div>
-                      <button onClick={this.setDiceRoll}>Roll</button>
-                      {this.displayDiceRoll()}
-                    </div>
-                    :
-                    null
-                  }
-                  {!!this.state.damage ?
-                    <div>
-                      <div>Click people to damage them.</div>
-                      <h3>Remaining Damage: {this.state.damage}</h3>
-                    </div>
-                    :
-                    null
-                  }
-                  {this.state.spellcasting ?
-                    <div>
-                      {this.renderSpell()}
-                      <button onClick={this.endSpellcasting}>Done</button>
-                    </div>
-                    :
-                    null
-                  }
+            {this.state.rolling && this.state.rollCount < 3 ?
+              <div>
+                <button onClick={this.setDiceRoll}>Roll</button>
+                {this.displayDiceRoll()}
+              </div>
+              :
+              null
+            }
 
-                  {this.props.questing ?
-                    <Link to="/battlefield">Back to the Map</Link>
-                    :
-                    null
-                  }
+            {!!this.state.damage ?
+              <div>
+                <div>Click people to damage them.</div>
+                <h3>Remaining Damage: {this.state.damage}</h3>
+              </div>
+              :
+              null
+            }
 
+            {this.state.spellcasting ?
+              <div>
+                {this.renderSpell()}
+                <button onClick={this.endSpellcasting}>Done</button>
+              </div>
+              :
+              null
+            }
+
+            {this.props.questing ?
+              <Link to="/battlefield">Back to the Map</Link>
+              :
+              null
+            }
 
           </div>
-          :
-          <Redirect to="/home" />
-          }
-      </div>
     )
   }
  }

@@ -77,6 +77,7 @@ class Party extends React.Component {
   }
 
   startEditing = () => {
+    console.log("hmm")
     this.setState({
       editing: true
     })
@@ -100,25 +101,20 @@ class Party extends React.Component {
   render() {
     return (
             <div>
-              { this.props.party.name ?
+              { this.props.party.id ?
                 <div>
                   {!this.props.questing ?
-                    <div>
+                    <div id="party-container">
                       <Link to="/store">Store</Link>
 
-                      {this.state.editing ?
-                      <form>
-                        <input type="text" value={this.state.name} onChange={this.handleChange}></input>
-                        <input type="submit" onSubmit={this.changeTeamName}></input>
-                      </form>
-                      :
-                      <h1 onClick={this.startEditing}>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
-                      }
+                      <h1 className="party-name" contentEditable={this.state.editing} onChange={this.handleChange}>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
+
+                      <div onClick={this.startEditing}>Edit Name</div>
 
                       <MapDisplay />
 
-                      <div className="party-members">{this.mapMembers()}</div>
-                      <div className="inventory">{this.mapEquipment()}</div>
+                      <div id="party-members">{this.mapMembers()}</div>
+                      <div id="inventory">{this.mapEquipment()}</div>
                       <p>Gold Available: {this.props.party.gold}</p>
                       <button onClick={this.deleteParty}>Delete Party</button>
                     </div>

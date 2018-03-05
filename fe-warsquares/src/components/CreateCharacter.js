@@ -21,8 +21,10 @@ class CreateCharacter extends React.Component {
 
   submitForm = (e) => {
     e.preventDefault()
-    PartyAdapter.createParty({member: this.state, name: `${this.props.user.username}'s Party`, user_id: this.props.user.id})
-      .then(this.props.importParty)
+    if (this.state.name) {
+      PartyAdapter.createParty({member: this.state, name: `${this.props.user.username}'s Party`, user_id: this.props.user.id})
+        .then(this.props.importParty)
+    }
   }
 
   render() {
