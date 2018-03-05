@@ -8,26 +8,27 @@ import {NAME_ARRAY} from '../resources/names.js'
 import {ARMOR_COLORS} from '../resources/armorcolors.js'
 import {SKIN_TONES} from '../resources/skintones.js'
 import PartyAdapter from "../api/PartyAdapter"
+import { Redirect } from 'react-router'
+
 
 
 
 class Encounter extends React.Component {
   state = {
-    enemyArr: []
+    enemyArr: [],
+    recruitFailed: false
   }
 
   //should calc bribe money
   calculateBribe = () => {
-      let bribe = 200 * (this.props.square[0] + this.props.square[1]) * this.props.enemyArr.length
-      return bribe
+    let bribe = 200 * (this.props.square[0] + this.props.square[1]) * this.props.enemyArr.length
+    return bribe
   }
 
   bribe = () => {
-    console.log("attempting bribe")
-    console.log(this.calculateBribe(), this.props.gold)
-    if (this.props.gold >= this.calculateBribe()) {
-      console.log("resolving encounter")
-        this.resolveEncounter()
+    let bribe = this.calculateBribe()
+    if (this.props.gold >= bribe) {
+        this.resolveEncounter(bribe)
     }
   }
 
@@ -81,8 +82,7 @@ class Encounter extends React.Component {
     this.props.setEnemies(enemyArr)
   }
 
-  resolveEncounter = () => {
-    let goldPaid = this.calculateBribe()
+  resolveEncounter = (goldPaid) => {
     let moveCount = this.props.map.info.moves + 1
     let complete = false
 
@@ -115,8 +115,18 @@ class Encounter extends React.Component {
   isntCastle = () => {
     let visId = [this.props.square[0] + this.props.square[1]*Math.sqrt(this.props.map.info.visited.length)]
     let notCastle = this.props.map.map.layout.match(/.{2}/g)[visId][0] !== "C"
-    console.log("Not Castle: ", visId, notCastle)
     return notCastle
+  }
+
+  attemptRecruit = () => {
+    let attempt = Math.random() * this.props.enemyArr.length
+    if (attempt < 2) {
+      this.resolveEncounter(0)
+    } else {
+      this.setState({
+        recruitFailed: true
+      })
+    }
   }
 
   render() {
@@ -126,7 +136,8 @@ class Encounter extends React.Component {
         {this.props.enemyArr.length ? <p>It's a {this.props.enemyArr[0].role}{!!(this.props.enemyArr.length - 1) ? ` and ${this.props.enemyArr.length - 1} allies` : null}!</p> : null}
           {this.isntCastle() ? <p onClick={this.bribe}>Bribe for {this.calculateBribe()}</p> : null }
           <Link to="/battle">Battle Them!</Link>
-          {this.props.tabard && this.isntCastle() ? <p>Attempt to Recruit</p>: null}
+          {this.props.tabard && this.isntCastle() ? <p onClick={this.attemptRecruit}>Attempt to Recruit</p>: null}
+          {this.state.recruitFailed ? <Redirect to="/battle"></Redirect> : null}
       </div>
     )
   }

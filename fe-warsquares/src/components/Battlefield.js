@@ -31,7 +31,7 @@ class Battlefield extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id="battlefield">
         { this.props.questing ?
           <div>
             <div>Battlefield</div>
