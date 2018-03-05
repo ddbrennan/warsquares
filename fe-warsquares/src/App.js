@@ -41,36 +41,23 @@ class App extends Component {
     const AuthStore = authorize(Store);
     const AuthParty = authorize(Party);
     const AuthBattle = authorize(Battle);
-    const AuthHome = authorize(AuthHome);
-
-    console.log("whole app rerendering")
+    const AuthHome = authorize(Home);
+    const AuthSignUp = authorize(SignUp);
+    const AuthLogin = authorize(Login);
 
     return (
       <div className="App">
-        {this.props.auth.isLoggedIn ? <button onClick={this.logout}>Logout</button> : null }
-        <Link to="/home">Home</Link>
         <Switch>
-          <Route exact path='/battlefield' component={Battlefield} />
-          <Route exact path='/store' component={Store} />
-          <Route exact path='/login' component={Login} />
-          <Route exact path='/signup' component={SignUp} />
-          <Route exact path='/party' component={Party} />
-          <Route exact path='/battle' component={Battle} />
-          <Route path="*" component={Home} />
+          <Route exact path='/battlefield' component={AuthBattlefield} />
+          <Route exact path='/store' component={AuthStore} />
+          <Route exact path='/login' component={AuthLogin} />
+          <Route exact path='/signup' component={AuthSignUp} />
+          <Route exact path='/party' component={AuthParty} />
+          <Route exact path='/battle' component={AuthBattle} />
+          <Route path="*" component={AuthHome} />
         </Switch>
       </div>
     );
-  }
-}
-
-
-const mapStateToProps = (state) => {
-
-  return {
-    auth: {
-      isLoggedIn: state.auth.isLoggedIn,
-      user: state.auth.user
-    }
   }
 }
 
@@ -81,4 +68,4 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch)
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(connect(null, mapDispatchToProps)(App));

@@ -193,3 +193,30 @@ body {
 .active-battler {
   background-color: red;
 }
+
+/* TITLE SCREEN */
+#title-screen {
+  text-align: center;
+}
+
+#title-screen h1 {
+  font-size: 5em;
+}
+
+#title-screen h3 {
+  font-size: 2em;
+}
+
+.auth-button {
+  background-color: #d6ae8b;
+  width: 20%;
+  margin: 1% auto;
+  font-size: 1.5em;
+  border: solid 5px black;
+  padding: 1%;
+}
+
+.auth-button:hover {
+  background-color: #d64e8b;
+  border: solid 5px red;
+}

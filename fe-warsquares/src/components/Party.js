@@ -99,8 +99,6 @@ class Party extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.props.auth.isLoggedIn ?
             <div>
               { this.props.party.name ?
                 <div>
@@ -132,11 +130,7 @@ class Party extends React.Component {
                 <CreateCharacter />
                 }
             </div>
-          :
-            <Redirect to="/home"></Redirect>
-        }
-      </div>
-    )
+              )
   }
  }
 

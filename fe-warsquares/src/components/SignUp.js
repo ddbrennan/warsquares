@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux'
 import { logIn, logOut } from '../actions'
 import { Redirect } from 'react-router'
 import AuthAdapter from '../api/AuthAdapter'
+import { withRouter } from "react-router-dom"
+
 
 
 
@@ -25,7 +27,12 @@ class SignUp extends React.Component {
     e.preventDefault()
     UserAdapter.createUser(this.state)
       .then(res => res.json())
-      .then(console.log)
+      .then(user => {
+        if (!user.error) {
+          localStorage.setItem('jwt', user.jwt)
+          this.props.logIn(user)
+        }
+      })
   }
 
   render() {
@@ -82,4 +89,4 @@ class SignUp extends React.Component {
    }, dispatch)
  }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignUp))
