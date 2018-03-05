@@ -18,7 +18,8 @@ class Battle extends React.Component {
     spellcasting: false,
     currentTurn: 0,
     rollCount: 0,
-    damage: 0
+    damage: 0,
+    healer: ""
   }
 
   getAllList = () => {
@@ -194,7 +195,8 @@ class Battle extends React.Component {
 
   endSpellcasting = () => {
     this.setState({
-      spellcasting: false
+      spellcasting: false,
+      healer: ""
     })
 
     this.passTurn()
@@ -304,7 +306,7 @@ class Battle extends React.Component {
 
   applyDamage = (enemy) => {
     let amount = this.state.spellcasting ? this.state.damage : 1
-    
+
     if (enemy.health > 0 && !!this.state.damage) {
         let target = this.state.combatants.find(c => c === enemy)
         if (target.health - amount >= 0) {
@@ -327,6 +329,18 @@ class Battle extends React.Component {
     }
   }
 
+  getHealed = (ally) => {
+    if (this.state.healer) {
+      let target = this.state.combatants.find(c => c === ally)
+      if (target.health + 1 <= target.max_health) {
+        target.health += 1
+        this.state.healer.mana -= 1
+        let healer = !!this.state.healer.mana ? this.state.healer : ""
+        this.setState({ healer })
+      }
+    }
+  }
+
   knightSpell = () => {
     if (this.state.combatants[this.state.currentTurn].mana > 2) {
       for (const combatant of this.state.combatants) {
@@ -341,15 +355,20 @@ class Battle extends React.Component {
 
   clericSpell = () => {
     if (this.state.combatants[this.state.currentTurn].mana > 0) {
-      //heal an ally
-      this.state.combatants[this.state.currentTurn].mana -= 1
+      this.setState({
+        healer: this.state.combatants[this.state.currentTurn]
+      })
     }
   }
 
   rogueSpell = () => {
     if (this.state.combatants[this.state.currentTurn].mana > 3) {
-      // repeat turn
       this.state.combatants[this.state.currentTurn].mana -= 4
+      this.setState({
+        rolling: true,
+        spellcasting: false,
+        rollCount: 0
+      })
     }
   }
 
@@ -378,7 +397,7 @@ class Battle extends React.Component {
 
   renderParty = () => {
     return this.props.allies.map(m => {
-       return <div className={`battle-char battle-box ${m === this.state.combatants[this.state.currentTurn] ? "active-battler" : ""}`}><BattleCharacter character={m} /></div>
+       return <div className={`battle-char battle-box ${m === this.state.combatants[this.state.currentTurn] ? "active-battler" : ""}`} onClick={() => this.getHealed(m)}><BattleCharacter character={m} /></div>
     })
   }
 
