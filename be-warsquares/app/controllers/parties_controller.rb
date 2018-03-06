@@ -1,6 +1,22 @@
 class PartiesController < ApplicationController
   before_action :authorize_user!
 
+  def index
+    party = Party.find_by(user_id: @current_user.id)
+
+    if party
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(PartySerializer.new(party)).serializable_hash
+
+      maps = party.party_maps.map { |map| {map: map.map, info: map} }
+
+      general_info = {characters: Character.all, equipment: Equipment.all, maps: maps}
+
+      json_return = serialized_data.merge(general_info)
+    end
+
+    render json: json_return
+  end
+
   def create
     party = Party.create(name: params[:party][:name], user_id: params[:party][:user_id], gold: 1000)
     char = Character.find_by(role: params[:member][:role])

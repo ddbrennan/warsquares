@@ -3,7 +3,6 @@ body {
   padding: 0;
   font-family: 'Libre Baskerville', serif;
   height: 100vh;
-  /* background-color: #122647; */
 }
 
 #battlefield {
@@ -61,15 +60,8 @@ body {
   top: 0;
   left: 0;
   z-index: -1;
-  /* animation: floating 3s ease infinite; */
 }
 
-
-@keyframes floating {
-  0% {margin: 0;}
-  50% {margin: 20px;}
-  100% {margin: 0;}
-}
 
 .grid-box {
   transform: rotateX(60deg) rotateY(0deg) rotateZ(-135deg);
@@ -157,26 +149,6 @@ body {
 
 }
 
-
-
-.rogue-standin {
-  width: 80%;
-  height: 80%;
-  background-color: red;
-}
-
-.mage-standin {
-  width: 80%;
-  height: 80%;
-  background-color: blue;
-}
-
-.cleric-standin {
-  width: 80%;
-  height: 80%;
-  background-color: yellow;
-}
-
 .battle-char {
   width: 25%;
 }
@@ -243,12 +215,78 @@ body {
 
 /* PARTY PAGE */
 .store-link {
-  width: 200px;
-  height: 70px;
-  background: url('./images/storelink-02.png');
-  background-repeat: no-repeat;
-  background-size: 100%;
-  margin: 2%;
+  width: 10%;
+  height: 110%;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  z-index: 1;
+  margin: -2.8% 0 0 0;
+  font-size: 1.3em;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: bold;
+  padding: 2% 0 0 0;
+  box-shadow: 0px 3px 2px #000;
+  background-color: #CCCCCC;
+  color: #000;
+  transition: margin .5s ease;
+  border-radius: 10px;
+}
+
+.store-link:hover {
+  margin: -1.8% 0 0 0;
+}
+
+#edit-button {
+  width: 10%;
+  height: 100%;
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  z-index: 1;
+  margin: -1.5% auto 0 auto;
+  font-size: 1.3em;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: bold;
+  text-align: center;
+  padding: 1% 0 0 0;
+  box-shadow: 0px 3px 2px #000;
+  background-color: #CCCCCC;
+  color: #000;
+  border-radius: 10px;
+  transition: margin .5s ease;
+}
+
+#edit-button:hover {
+  margin: -.8% auto 0 auto;
+}
+
+#logout-button {
+  width: 10%;
+  height: 110%;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  z-index: 1;
+  margin: -2.8% 0 0 0;
+  font-size: 1.3em;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: bold;
+  padding: 2% 0 0 0;
+  box-shadow: 0px 3px 2px #000;
+  background-color: #CCCCCC;
+  color: #000;
+  transition: margin .5s ease;
+  border-radius: 10px;
+  position: relative;
+  left: 84%;
+}
+
+#logout-button:hover {
+  margin: -1.2% 0 0 0;
 }
 
 a {
@@ -257,64 +295,180 @@ a {
 }
 
 #party-container {
+  background: linear-gradient(-15deg, #330000, #660000);
   height: 100vh;
   display: grid;
   grid-template-columns: 5% 60% 30% 5%;
-  grid-template-rows: 10% 5% 60% 20% 5%;
+  grid-template-rows: 5% 10% 5% 55% 20% 5%;
 }
 
 .party-name {
   font-size: 3em;
   text-align: center;
+  grid-column-start: 1;
+  grid-column-end: 5;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  height: 90%;
+  background-color: #CC9933;
+  margin: 0;
+  color: #330000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 3px 2px #000;
+  z-index: 5;
+
+}
+
+.party-name h1 {
+  color: #663300;
+  font-size: 1.3em;
+  text-shadow: 2px 2px 3px #FFCC66;
+}
+
+#gold-display {
   grid-column-start: 2;
-  grid-column-end: 4;
-  grid-row-start: 1;
-  grid-row-end: 2;
-  border: solid 5px black;
-  height: 100%;
+  grid-column-end: 5;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  z-index: 20;
+  width: 10%;
+  height: 70%;
+  margin: .5% 0 0 0;
+  /* background-color: white; */
+}
+
+#gold-coin {
+  width: 30%;
+  height: 90%;
+  background-image: url('./images/coin-03.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  margin: 4%;
+  display: inline-block;
+  float: left;
+}
+
+#gold-display p {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 12%;
+}
+
+#party-container a {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
 }
 
 #map-container {
   grid-column-start: 3;
   grid-column-end: 4;
-  grid-row-start: 3;
-  grid-row-end: 5;
+  grid-row-start: 4;
+  grid-row-end: 6;
   display: grid;
   grid-template-rows: 75% 25%;
 }
 
 #map-list {
   overflow: scroll;
-  border: solid 5px black;
+  background-color: #CCCCCC;
+  margin: 2% 1% 4% 1%;
+  box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.7);
 }
 
 #map-generator {
-  border: solid 5px black;
+  background-color: #CCCCCC;
+  margin: 0 1% 2% 1%;
+  box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.7);
 
 }
 
 #party-members {
   grid-column-start: 2;
   grid-column-end: 3;
-  grid-row-start: 3;
-  grid-row-end: 4;
-  overflow: scroll;
-  border: solid 5px black;
-}
-
-#inventory {
-  grid-column-start: 2;
-  grid-column-end: 3;
   grid-row-start: 4;
   grid-row-end: 5;
-  border: solid 5px black;
+  overflow: scroll;
+  background-color: #CCCCCC;
+  margin: 1%;
+  box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.7);
+}
+
+.inventory {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 5;
+  grid-row-end: 6;
+  background-color: #CCCCCC;
+  margin: 1%;
+  box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.7);
 }
 
 .party-display-char {
-  display: inline-block;
-  width: 25%;
-  border: solid 5px black;
+  display: block;
+  float: left;
+  width: 20%;
+  height: 65%;
+  margin: 1%;
+  background-color: white;
   padding: 1%;
+  border: solid 3px #DDD;
+  border-radius: 10px;
+  display: grid;
+  /* grid-template-columns: 5% 60% 30% 5%; */
+  grid-template-rows: 2% 60% 15% 10% 10% 2%;
+}
+
+.rogue-avatar {
+  
+}
+
+.party-display-char-avatar {
+  width: 80%;
+  margin: auto;
+}
+
+.avatar-container {
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+.avatar-name {
+  text-align: center;
+  grid-row-start: 4;
+  grid-row-end: 5;
+  margin: 0;
+}
+
+.personal-inventory {
+  grid-row-start: 5;
+  grid-row-end: 6;
+  text-align: center;
+}
+
+#delete-party {
+  margin-top: 10%;
+  width: 70px;
+  height: 70%;
+  grid-column-start: 4;
+  grid-column-end: 5;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  background-color: transparent;
+  border: none;
+  color: #663300;
+  font-size: 2em;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: bold;
+  transition: all 1s ease;
+  z-index: 10;
+}
+
+#delete-party:hover {
+  transform: rotate(360deg);
 }
 
 /* BATTLE */
@@ -323,6 +477,7 @@ a {
   grid-template-columns: 5% 40% 10% 40% 5%;
   grid-template-rows: 5% 10% auto;
   height: 100vh;
+
 }
 
 .allies-container {

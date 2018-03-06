@@ -15,6 +15,8 @@ import { logIn, logOut, importParty } from './actions'
 import { withRouter } from "react-router-dom"
 import { Link } from 'react-router-dom'
 import authorize from './components/hoc/authorize'
+import { Redirect } from 'react-router'
+
 
 
 
@@ -51,7 +53,8 @@ class App extends Component {
           <Route exact path='/store' component={AuthStore} />
           <Route exact path='/party' component={AuthParty} />
           <Route exact path='/battle' component={AuthBattle} />
-          <Route path="*" component={AuthHome} />
+          <Route exact path="/home" component={AuthHome} />
+          <Redirect from="/" to="/home" />
         </Switch>
       </div>
     );

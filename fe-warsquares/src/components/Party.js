@@ -4,10 +4,12 @@ import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PartyAdapter from "../api/PartyAdapter"
-import { importParty, deleteParty, updateParty } from '../actions'
+import { importParty, deleteParty, updateParty, logOut } from '../actions'
 import Character from './Character'
 import MapDisplay from './MapDisplay'
 import CreateCharacter from './CreateCharacter'
+import { withRouter } from "react-router-dom"
+
 
 
 
@@ -19,8 +21,8 @@ class Party extends React.Component {
   }
 
   componentDidMount = () => {
-    if (this.props.auth.user) {
-      PartyAdapter.getUserParty(this.props.auth.user.id)
+    if (localStorage.getItem('jwt')) {
+      PartyAdapter.getUserParty()
         .then(this.props.importParty)
       }
   }
@@ -29,9 +31,13 @@ class Party extends React.Component {
     if (this.props.party.members) {
       return this.props.party.members.map(m => {
         return (<div className="party-display-char">
-                  <Character key={m.id} character={m} />
-                  <h3> {m.name} </h3>
-                  <div onClick={this.equipItem} id={`${m.id}member`}>Inventory</div>
+                  <div className="avatar-container">
+                    <div className={`party-display-char-avatar ${m.role}-avatar`}>
+                      <Character key={m.id} character={m} />
+                    </div>
+                  </div>
+                  <h3 className="avatar-name"> {m.name} </h3>
+                  <div className="personal-inventory" onClick={this.equipItem} id={`${m.id}member`}>Inventory</div>
                 </div>)
               })
     }
@@ -44,8 +50,11 @@ class Party extends React.Component {
     }
 
     let newEquip = this.props.party.equipment.find(item => item.id === parseInt(this.state.heldEquipment))
-    newEquip.owner_id = parseInt(e.target.id)
-    newEquip.update = true
+
+    if (newEquip) {
+      newEquip.owner_id = parseInt(e.target.id)
+      newEquip.update = true
+    }
 
     this.setState({
       heldEquipment: ""
@@ -77,25 +86,33 @@ class Party extends React.Component {
   }
 
   startEditing = () => {
-    console.log("hmm")
-    this.setState({
-      editing: true
-    })
+    if (!this.state.editing) {
+      this.setState({
+        editing: true
+      })
+    } else {
+      this.setState({
+        editing: false
+      })
+      PartyAdapter.updateParty(this.props.party.id, {party: {name: this.state.name}})
+        .then(this.props.importParty)
+    }
   }
 
   handleChange = (e) => {
     this.setState({
-      name: e.target.value
+      name: e.target.innerHTML
     })
   }
 
-  changeTeamName = (e) => {
-    e.preventDefault()
-    this.setState({
-      editing: false
-    })
-    PartyAdapter.updateParty(this.props.party.id, {name: this.state.name})
-      .then(this.props.importParty)
+  renderButton = () => {
+    const Button = withRouter(({ history }) => (<button className="store-link" onClick={() => { history.push('/store') }}>Store</button>))
+    return <Button />
+  }
+
+  logout = () => {
+    localStorage.removeItem('jwt')
+    this.props.logOut()
   }
 
   render() {
@@ -105,18 +122,27 @@ class Party extends React.Component {
                 <div>
                   {!this.props.questing ?
                     <div id="party-container">
-                      <Link to="/store">Store</Link>
+                      {this.renderButton()}
 
-                      <h1 className="party-name" contentEditable={this.state.editing} onChange={this.handleChange}>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
+                      <div className="party-name">
+                        <h1 contentEditable={this.state.editing} onBlur={this.handleChange}>{this.props.party.name && this.props.party.name.toUpperCase()}</h1>
+                      </div>
 
-                      <div onClick={this.startEditing}>Edit Name</div>
+                      <button id="edit-button" onClick={this.startEditing}>
+                        {this.state.editing ? "Save Name" : "Edit Name"}
+                      </button>
+
+                      <button id="logout-button" onClick={this.logout}>Logout</button>
 
                       <MapDisplay />
 
                       <div id="party-members">{this.mapMembers()}</div>
-                      <div id="inventory">{this.mapEquipment()}</div>
-                      <p>Gold Available: {this.props.party.gold}</p>
-                      <button onClick={this.deleteParty}>Delete Party</button>
+                      <div className="inventory">{this.mapEquipment()}</div>
+                      <div id="gold-display">
+                        <div id="gold-coin"></div>
+                        <p>{this.props.party.gold}</p>
+                      </div>
+                      <button id="delete-party" onClick={this.deleteParty}>X</button>
                     </div>
                     :
                     <Redirect to="/battlefield"></Redirect>
@@ -154,7 +180,8 @@ class Party extends React.Component {
  const mapDispatchToProps = (dispatch) => {
    return bindActionCreators({
      importParty: importParty,
-     deleteParty: deleteParty
+     deleteParty: deleteParty,
+     logOut: logOut
    }, dispatch)
  }
 
