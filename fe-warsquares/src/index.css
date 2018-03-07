@@ -381,8 +381,32 @@ a {
   background: linear-gradient(-15deg, #330000, #660000);
   height: 100vh;
   display: grid;
-  grid-template-columns: 5% 60% 30% 5%;
-  grid-template-rows: 5% 10% 5% 55% 20% 5%;
+  grid-template-columns: 5% 90% 5%;
+  grid-template-rows: 5% 10% 5% 75% 5%;
+}
+
+.store-name {
+  font-size: 3em;
+  text-align: center;
+  grid-column-start: 1;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  height: 90%;
+  background-color: #CC9933;
+  margin: 0;
+  color: #330000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 3px 2px #000;
+  z-index: 5;
+}
+
+.store-name h1 {
+  color: #663300;
+  font-size: 1.3em;
+  text-shadow: 2px 2px 3px #FFCC66;
 }
 
 #create-container {
@@ -409,7 +433,6 @@ a {
   align-items: center;
   box-shadow: 0px 3px 2px #000;
   z-index: 5;
-
 }
 
 .party-name h1 {
@@ -805,12 +828,85 @@ a {
   z-index: 10;
 }
 
+#store-equipment {
+  grid-row-start: 4;
+  grid-row-end: 5;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  overflow:scroll;
+}
+
 .equip-for-sale {
-  width: 35%;
+  background-color: #ccc;
+  width: 48%;
   height: 20vh;
   display: inline-block;
-  padding: 2%;
-  border: solid 5px black;
+  float: left;
+  margin: 1%;
+  transition: all .25s ease;
+}
+
+.equip-for-sale:hover {
+  background-color: #eee
+}
+
+.owned {
+  opacity: .5;
+}
+
+.cost-coin {
+  width: 4%;
+  height: 15%;
+  background-image: url('./images/coin-03.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  display: inline-block;
+  margin-right: 1%;
+  float: left;
+}
+
+.equip-info {
+  margin: 0 0 0 10%;
+  height: 100%;
+}
+
+.equip-info h2 {
+  width: 88%;
+  padding: 1%;
+  margin-left: 10%;
+  background-color: #330000;
+  color: white;
+}
+
+.equip-for-sale .magazine {
+  width: 12%;
+  height: 98%;
+  margin: 1% 5% 0 3%;
+  z-index: 5;
+}
+
+.party-link {
+  width: 10%;
+  height: 110%;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  z-index: 1;
+  margin: -6.5% 0 0 0;
+  font-size: 1.3em;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: bold;
+  padding: 2% 0 0 0;
+  box-shadow: 0px 3px 2px #000;
+  background-color: #CCCCCC;
+  color: #000;
+  transition: margin .5s ease;
+  border-radius: 10px;
+}
+
+.party-link:hover {
+  margin: -1.8% 0 0 0;
 }
 
 /* BATTLE */

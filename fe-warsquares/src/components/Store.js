@@ -4,28 +4,35 @@ import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Equipment from './Equipment'
+import { withRouter } from "react-router-dom"
+
 
 class Store extends React.Component {
 
   displayEquipment = () => {
-
     return this.props.equipment.all.map(e => <Equipment
                                                 key={e.id}
                                                 equipment={e} />)
   }
 
+  renderButton = () => {
+    return <button className="party-link" onClick={() => { this.props.history.push('/store') }}>Store</button>
+  }
+
   render() {
     return (
           <div id="store-container">
-            <div className="party-name">
+            <div className="store-name">
               <h1>THE STORE</h1>
             </div>
-          <div id="gold-display">
-              <div id="gold-coin"></div>
-              <p>{this.props.gold}</p>
-          </div>
-            <Link to="/party">Party</Link>
-            { this.displayEquipment() }
+            <div id="gold-display">
+                <div id="gold-coin"></div>
+                <p>{this.props.gold}</p>
+            </div>
+            {this.renderButton()}
+            <div id="store-equipment">
+              { this.displayEquipment() }
+            </div>
           </div>
     )
   }
@@ -33,10 +40,6 @@ class Store extends React.Component {
 
  const mapStateToProps = (state) => {
    return {
-     auth: {
-       isLoggedIn: state.auth.isLoggedIn,
-       user: state.auth.user
-     },
      equipment: {
        owned: state.party.party.equipment,
        all: state.party.equipment
@@ -45,4 +48,4 @@ class Store extends React.Component {
    }
  }
 
-export default connect(mapStateToProps)(Store)
+export default withRouter(connect(mapStateToProps)(Store))

@@ -30,11 +30,13 @@ class Equipment extends React.Component {
 
   render() {
     return (
-      <div className="equip-for-sale" onClick={this.purchaseItem}>
-        <div className={this.slugify(this.props.equipment.name)}></div>
-        <h2>{this.props.equipment.name}</h2>
-        <h3>{this.checkOwnership() ? "IN INVENTORY" : this.props.equipment.cost}</h3>
-        <p>{this.props.equipment.bonus}</p>
+      <div className={`equip-for-sale ${this.checkOwnership() ? "owned" : ""}`}  onClick={this.purchaseItem}>
+        <div className={`magazine ${this.slugify(this.props.equipment.name)}`}></div>
+        <div className="equip-info">
+          <h2>{this.props.equipment.name}</h2>
+          <div className="cost-coin"></div><h3>{this.checkOwnership() ? "IN INVENTORY" : `${this.props.equipment.cost}`}</h3>
+          <p>{this.props.equipment.bonus}</p>
+        </div>
       </div>
     )
   }
