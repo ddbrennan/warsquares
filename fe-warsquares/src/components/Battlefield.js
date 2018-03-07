@@ -29,15 +29,20 @@ class Battlefield extends React.Component {
       .then(this.props.resetMap)
   }
 
+  renderButton = () => {
+    return <button className="bf-party-link" onClick={() => { this.props.history.push('/party') }}>Party</button>
+  }
+
   render() {
     return (
       <div id="battlefield">
         { this.props.questing ?
           <div>
-            <div>Battlefield</div>
-            <Link to="/party">Party</Link>
-
-            <h2>{this.props.map.info.moves}</h2>
+            {this.renderButton()}
+            <div className="move-counter">
+              <p>Moves Taken:</p>
+              <h2>{this.props.map.info.moves}</h2>
+            </div>
           { this.props.encounter && <Encounter />}
           <GridMap map={this.props.map} />
           {this.props.map.info.complete ?

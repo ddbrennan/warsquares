@@ -25,11 +25,17 @@ class MapItem extends React.Component {
     }
   }
 
+  enterBattle = (e) => {
+    if (e.target.className !== "delete-button") {
+      this.props.enterBattle(this.props.map.id, this.props.info.current_square)
+    }
+  }
+
   render() {
 
     return (
       <div>
-        <div onClick={() => this.props.enterBattle(this.props.map.id, this.props.info.current_square)}>
+        <div onClick={this.enterBattle}>
           <div className="map-name">
             {this.props.map.name}
             <button className="delete-button" onClick={this.deleteMap}>X</button>
