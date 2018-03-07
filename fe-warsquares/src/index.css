@@ -70,17 +70,24 @@ body {
 
 .grid-box {
   transform: rotateX(60deg) rotateY(0deg) rotateZ(-135deg);
+  /* animation: hovering 20s ease infinite; */
 }
+/*
+@keyframes hovering {
+  0% { margin-top: -2%; }
+  50% { margin-top: 2%; }
+  100% { margin-top: -2%; }
+} */
 
 #sides {
   width: 20%;
   height: 100%;
   /* background-color: #C4A97A; */
-  background-image: url('./images/side-02.png');
+  background-image: url('./images/side-12.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   position: absolute;
-  top: -10%;
+  top: -10.25%;
   left: -20%;
   transform: skewY(45deg);
 }
@@ -90,12 +97,12 @@ body {
   width: 100%;
   height: 20%;
   /* background-color: #C4A97A; */
-  background-image: url('./images/side-01.png');
+  background-image: url('./images/side-11.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   position: absolute;
   top: -20%;
-  right: 10%;
+  right: 10.25%;
   transform: skewX(45deg);
 }
 
@@ -154,20 +161,7 @@ body {
 
 }
 
-.battle-char {
-  width: 25%;
-}
 
-.battle-box {
-  border: solid 3px black;
-  margin: 2%;
-  float: left;
-  display: block;
-}
-
-.active-battler {
-  background-color: red;
-}
 
 /* TITLE SCREEN */
 #title-screen {
@@ -956,6 +950,81 @@ a {
   margin: 0;
 }
 
+#encounter-popup {
+  background: #CCC;
+  width: 20%;
+  position: absolute;
+  left: 40%;
+  top: 40%;
+  padding-bottom: 1%;
+  animation: bounce-in .5s;
+  box-shadow: 3px 3px 3px #000;
+}
+
+#encounter-popup h2 {
+  text-align: center;
+  margin: 0;
+  background-color:#CC9933;
+  padding: 2% 1% 0 1%;
+  font-size: 2em;
+}
+
+#encounter-popup p {
+  text-align: center;
+  margin: 0;
+  background-color:#CC9933;
+  padding: 1% 1% 3% 1%;
+}
+
+.bribe-link {
+  width: 80%;
+  margin: 2% auto;
+  text-align: center;
+  padding: 1%;
+  background-color: #330000;
+  transition: all .5s ease;
+  color: white;
+  cursor: pointer;
+}
+
+.bribe-link:hover {
+  width: 98%;
+  background-color: black;
+}
+
+.battle-link {
+  width: 80%;
+  margin: 2% auto;
+  background-color: #330000;
+  text-align: center;
+  padding: 1%;
+  transition: all .5s ease;
+}
+
+.battle-link:hover {
+  width: 98%;
+  background-color: black;
+}
+
+.battle-link a {
+  text-decoration: none;
+  color: white;
+}
+
+.recruit-link {
+  width: 80%;
+  margin: 2% auto;
+  border: solid 2px black;
+  text-align: center;
+  padding: 1%;
+
+
+}
+
+#map-complete {
+
+}
+
 /* BATTLE */
 .battle-container {
   display: grid;
@@ -969,11 +1038,76 @@ a {
   grid-column-start: 2;
   grid-column-end: 3;
   grid-row-start: 3;
-
 }
 
 .enemies-container {
   grid-column-start: 4;
   grid-column-end: 5;
   grid-row-start: 3;
+}
+
+.battle-character-container {
+}
+
+.battle-name {
+  text-align: center;
+  background-color: #330000;
+  color: white;
+  padding: 1%;
+}
+
+.battle-stats {
+  font-weight: bold;
+  width: 60%;
+  margin: auto;
+}
+
+.health-bar {
+  float: left;
+  display: block;
+  width: 45%;
+}
+
+.heart {
+  float: left;
+  display: block;
+  background-image: url('./images/heart.png');
+  width: 20px;
+  height: 20px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  margin-right: .5%;
+}
+
+.mana-bar {
+  float: left;
+  display: block;
+  width: 45%;
+  margin-left: 5%;
+}
+
+.mana {
+  float: left;
+  display: block;
+  background-image: url('./images/mana.png');
+  width: 20px;
+  height: 20px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  margin-right: 1%;
+}
+
+.battle-char {
+  width: 25%;
+}
+
+.battle-box {
+  margin: 2%;
+  float: left;
+  display: block;
+  background: #CCC
+}
+
+.active-battler {
+  background-color: red;
 }

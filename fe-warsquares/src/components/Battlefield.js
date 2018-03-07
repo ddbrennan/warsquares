@@ -8,6 +8,8 @@ import Encounter from './Encounter'
 import Character from './Character'
 import { stopQuesting, resetMap } from '../actions'
 import PartyAdapter from "../api/PartyAdapter"
+import { withRouter } from "react-router-dom"
+
 
 
 class Battlefield extends React.Component {
@@ -46,7 +48,7 @@ class Battlefield extends React.Component {
           { this.props.encounter && <Encounter />}
           <GridMap map={this.props.map} />
           {this.props.map.info.complete ?
-            <div>
+            <div id="map-complete">
               <div>Congratulations! You Captured the Castle</div>
               <button onClick={this.resetMap}>Reset the Map?</button>
             </div>
@@ -94,4 +96,4 @@ class Battlefield extends React.Component {
    }
  }
 
-export default connect(mapStateToProps, { stopQuesting, resetMap })(Battlefield)
+export default withRouter(connect(mapStateToProps, { stopQuesting, resetMap })(Battlefield))

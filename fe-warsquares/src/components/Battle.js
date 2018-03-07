@@ -410,14 +410,16 @@ class Battle extends React.Component {
     })
   }
 
-  //should redirect if there is no enemy array
   render() {
     return (
+          <div>
+            {this.props.allies
+            ?
           <div className="battle-container">
             {this.state.rolling || this.state.damage || this.state.spellcasting || this.props.questing ?
               null
               :
-              <button onClick={this.takeTurns}>Start Battle</button>
+              <button id="start-button" onClick={this.takeTurns}>Start Battle</button>
              }
 
             <div className="allies-container">
@@ -460,6 +462,9 @@ class Battle extends React.Component {
               null
             }
 
+          </div>
+          : <Redirect to='/party' />
+          }
           </div>
     )
   }
