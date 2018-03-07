@@ -377,6 +377,22 @@ a {
   grid-template-rows: 5% 10% 5% 55% 20% 5%;
 }
 
+#store-container {
+  background: linear-gradient(-15deg, #330000, #660000);
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 5% 60% 30% 5%;
+  grid-template-rows: 5% 10% 5% 55% 20% 5%;
+}
+
+#create-container {
+  background: linear-gradient(-15deg, #330000, #660000);
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 5% 60% 30% 5%;
+  grid-template-rows: 5% 10% 5% 55% 20% 5%;
+}
+
 .party-name {
   font-size: 3em;
   text-align: center;
@@ -787,6 +803,14 @@ a {
   margin-right: 1%;
   float: right;
   z-index: 10;
+}
+
+.equip-for-sale {
+  width: 35%;
+  height: 20vh;
+  display: inline-block;
+  padding: 2%;
+  border: solid 5px black;
 }
 
 /* BATTLE */

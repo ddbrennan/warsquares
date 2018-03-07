@@ -14,15 +14,24 @@ class Equipment extends React.Component {
 
   purchaseItem = () => {
     if (!this.checkOwnership() && this.props.gold > this.props.equipment.cost ) {
-      console.log("making order")
       PartyAdapter.updateParty(this.props.partyId, {item: {equipment_id: this.props.equipment.id}, gold: this.props.gold - this.props.equipment.cost})
         .then(this.props.importParty)
     }
   }
 
+  slugify = (string) => {
+    return string.toString().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '')
+  }
+
   render() {
     return (
-      <div onClick={this.purchaseItem}>
+      <div className="equip-for-sale" onClick={this.purchaseItem}>
+        <div className={this.slugify(this.props.equipment.name)}></div>
         <h2>{this.props.equipment.name}</h2>
         <h3>{this.checkOwnership() ? "IN INVENTORY" : this.props.equipment.cost}</h3>
         <p>{this.props.equipment.bonus}</p>

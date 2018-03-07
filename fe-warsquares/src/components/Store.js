@@ -16,11 +16,15 @@ class Store extends React.Component {
 
   render() {
     return (
-          <div>
-            <div>Store</div>
+          <div id="store-container">
+            <div className="party-name">
+              <h1>THE STORE</h1>
+            </div>
+          <div id="gold-display">
+              <div id="gold-coin"></div>
+              <p>{this.props.gold}</p>
+          </div>
             <Link to="/party">Party</Link>
-
-            <h3>Available gold: {this.props.gold}</h3>
             { this.displayEquipment() }
           </div>
     )

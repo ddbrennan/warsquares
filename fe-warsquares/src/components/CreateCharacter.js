@@ -29,8 +29,11 @@ class CreateCharacter extends React.Component {
 
   render() {
     return (
-      <div>
-        <h3>Create Your Party Leader:</h3>
+      <div id="create-container">
+        <div className="party-name">
+          <h1>CREATE YOUR CHARACTER</h1>
+        </div>
+        
         <div>
           <div className="new-char-avatar">
             <Character character={{
