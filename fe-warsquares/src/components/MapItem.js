@@ -14,7 +14,7 @@ class MapItem extends React.Component {
   getStatus = () => {
     let moves = this.props.info.moves
     let width = Math.floor(Math.sqrt(this.props.info.visited.length))
-    if (this.props.complete) {
+    if (this.props.info.complete) {
       return "complete"
     } else if (moves === 0) {
       return "not-started"
