@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { logIn, logOut } from '../actions'
 import { Link } from 'react-router-dom'
+import { withRouter } from "react-router-dom"
 
 
 class Login extends React.Component {
@@ -24,6 +25,8 @@ class Login extends React.Component {
         if (!user.error) {
           this.props.logIn(user)
           localStorage.setItem('jwt', user.jwt)
+          this.props.history.push('/party')
+
         } else {
           this.setState({ error: user.error})
         }
@@ -40,6 +43,7 @@ class Login extends React.Component {
   render() {
     return (
       <div className="auth-form">
+        <h3 id="error">{this.state.error ? `${this.state.error.toUpperCase()}` : null}</h3>
         <h1 className="tiny-headline">Sign In</h1>
         <form onSubmit={ this.logIn }>
           <input
@@ -78,4 +82,4 @@ class Login extends React.Component {
    }, dispatch)
  }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login))

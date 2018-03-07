@@ -14,7 +14,8 @@ class SignUp extends React.Component {
   state = {
     username: "",
     password: "",
-    passwordConfirm: ""
+    passwordConfirm: "",
+    error: ""
   }
 
   handleFormChange = (e) => {
@@ -31,7 +32,9 @@ class SignUp extends React.Component {
         if (!user.error) {
           localStorage.setItem('jwt', user.jwt)
           this.props.logIn(user)
+          this.props.history.push('/party')
         } else {
+          console.log(user.error)
           this.setState({ error: user.error})
         }
       })
@@ -40,6 +43,7 @@ class SignUp extends React.Component {
   render() {
     return (
           <div className="auth-form">
+            <h3 id="error">{this.state.error ? `${this.state.error[0].toUpperCase()} ${this.state.error[1].toUpperCase()}` : null}</h3>
             <h1 className="tiny-headline">Sign Up</h1>
             <form onSubmit={this.handleSubmit}>
               <input

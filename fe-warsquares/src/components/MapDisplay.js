@@ -19,13 +19,6 @@ class MapDisplay extends React.Component {
       return this.props.maps.map(m => <div className="map-item"><MapItem map={m.map} info={m.info} /></div>)
     }
   }
-  // Active Map
-
-  // Incomplete Maps
-
-  // Completed Maps (move count)
-
-  // Delete Map From List
 
   createMap = (e) => {
     e.preventDefault()
@@ -83,6 +76,12 @@ class MapDisplay extends React.Component {
     })
   }
 
+  selectWidth = (val) => {
+    this.setState({
+      width: val
+    })
+  }
+
   render() {
     return (
       <div id="map-container">
@@ -90,20 +89,20 @@ class MapDisplay extends React.Component {
           {this.listMaps()}
         </div>
         <div id="map-generator">
-          <h3>Generate New Map</h3>
-          <form onSubmit={this.createMap}>
-            <label>Name Your Map
-              <input type="text" name="name" value={this.state.name} onChange={this.handleChange}></input>
-            </label>
-            <select name="width" onChange={this.handleChange} value={this.state.width}>
-              <option disabled value="">SELECT A SIZE</option>
-              <option value="4">4 x 4</option>
-              <option value="5">5 x 5</option>
-              <option value="6">6 x 6</option>
-              <option value="7">7 x 7</option>
-            </select>
-            <input type="submit" value="Create Map"></input>
-          </form>
+          <h3 id="map-create-title">Create A New Map</h3>
+            <div id="map-create-name">
+              <input type="text" name="name" value={this.state.name} onChange={this.handleChange} placeholder="Map Name"></input>
+            </div>
+          <div id="width-select">
+              <div onClick={() => this.selectWidth("4")} className={this.state.width === "4" ? "chosen width" : "width"}>4 x 4</div>
+              <div onClick={() => this.selectWidth("5")} className={this.state.width === "5" ? "chosen width" : "width"}>5 x 5</div>
+              <div onClick={() => this.selectWidth("6")} className={this.state.width === "6" ? "chosen width" : "width"}>6 x 6</div>
+              <div onClick={() => this.selectWidth("7")} className={this.state.width === "7" ? "chosen width" : "width"}>7 x 7</div>
+            </div>
+
+            <div id="map-create-submit">
+            <button onClick={this.createMap}>Create Map</button>
+            </div>
         </div>
       </div>
     )

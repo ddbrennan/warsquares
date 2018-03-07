@@ -114,7 +114,7 @@ class Party extends React.Component {
     if (this.state.heldEquipment) {
       let item = this.props.party.equipment.find(e => e.id === parseInt(this.state.heldEquipment))
       let equip = this.props.party.equipmentAll.find(e => e.id === item.equipment_id)
-      return <div className="party-equipment-display">Moving: {equip.name}</div>
+      return <div className={`${this.slugify(equip.name)} moving`}></div>
     }
   }
 
