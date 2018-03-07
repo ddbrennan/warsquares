@@ -63,9 +63,11 @@ class PartiesController < ApplicationController
           oldEquip.save
         end
         # find current equip, switch owner id
-        newEquip = PartyEquipment.find(item_params[:id])
-        newEquip.owner_id = item_params[:owner_id]
-        newEquip.save
+        if item_params[:id] > 0
+          newEquip = PartyEquipment.find(item_params[:id])
+          newEquip.owner_id = item_params[:owner_id]
+          newEquip.save
+        end
       else
         party.equipments << Equipment.find(item_params[:equipment_id])
       end

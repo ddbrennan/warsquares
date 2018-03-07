@@ -11,18 +11,35 @@ class MapItem extends React.Component {
       .then(this.props.importParty)
   }
 
+  getStatus = () => {
+    let moves = this.props.info.moves
+    let width = Math.floor(Math.sqrt(this.props.info.visited.length))
+    if (this.props.complete) {
+      return "complete"
+    } else if (moves === 0) {
+      return "not-started"
+    } else if (moves <= width) {
+      return "in-progress"
+    } else if (moves > width) {
+      return "working-hard"
+    }
+  }
+
   render() {
 
     return (
       <div>
         <div onClick={() => this.props.enterBattle(this.props.map.id, this.props.info.current_square)}>
-          <h3>Map</h3>
-          <div>Name: {this.props.map.name}</div>
-          <div>Size: {Math.floor(Math.sqrt(this.props.info.visited.length))}</div>
-          <div>Moves Taken: {this.props.info.moves}</div>
-          <div>Complete: {this.props.info.complete ? "Yup" : "Nope"}</div>
+          <div className="map-name">
+            {this.props.map.name}
+            <button className="delete-button" onClick={this.deleteMap}>X</button>
+          </div>
+          <div className="map-stats">
+            <div>Size: {Math.floor(Math.sqrt(this.props.info.visited.length))}</div>
+            <div>Moves Taken: {this.props.info.moves}</div>
+          </div>
+          <div className={this.getStatus()}></div>
         </div>
-        <button onClick={this.deleteMap}>Delete Map</button>
       </div>
     )
   }

@@ -31,18 +31,16 @@ class SignUp extends React.Component {
         if (!user.error) {
           localStorage.setItem('jwt', user.jwt)
           this.props.logIn(user)
+        } else {
+          this.setState({ error: user.error})
         }
       })
   }
 
   render() {
     return (
-      <div>
-        {this.props.isLoggedIn ?
-          <Redirect to="/party"></Redirect>
-          :
-          <div>
-            <h1>Sign Up Page</h1>
+          <div className="auth-form">
+            <h1 className="tiny-headline">Sign Up</h1>
             <form onSubmit={this.handleSubmit}>
               <input
                 type="text"
@@ -64,11 +62,9 @@ class SignUp extends React.Component {
                 placeholder="Confirm Password"
                 value={this.state.passwordConfirm}
                 onChange={this.handleFormChange}></input>
-              <input type="submit" value="Sign Up!"></input>
+              <input className="submit-button" type="submit" value="Sign Up!"></input>
             </form>
           </div>
-          }
-      </div>
     )
   }
  }

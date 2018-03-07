@@ -23,7 +23,11 @@ class Party extends React.Component {
   componentDidMount = () => {
     if (localStorage.getItem('jwt')) {
       PartyAdapter.getUserParty()
-        .then(this.props.importParty)
+        .then(party => {
+          if (party) {
+            this.props.importParty(party)
+          }
+        })
       }
   }
 
@@ -36,18 +40,33 @@ class Party extends React.Component {
                       <Character key={m.id} character={m} />
                     </div>
                   </div>
-                  <h3 className="avatar-name"> {m.name} </h3>
-                  <div className="personal-inventory" onClick={this.equipItem} id={`${m.id}member`}>Inventory</div>
+                  <div className="avatar-name">
+                    <h3> {m.name} </h3>
+                  </div>
+                  <div className="personal-inventory" onClick={this.equipItem} id={`${m.id}member`}>{this.findEquipment(m.id)}</div>
                 </div>)
               })
     }
   }
 
+  findEquipment = (owner) => {
+    let result = "No Items Equipped"
+    let item = this.props.party.equipment.find(e => e.owner_id === owner)
+    if (item) {
+      let equip = this.props.party.equipmentAll.find(e => e.id === item.equipment_id)
+      result = equip.name
+    }
+    return result
+  }
+
   equipItem = (e) => {
     let oldEquip = this.props.party.equipment.find(item => item.owner_id === parseInt(e.target.id))
+    let held = ""
     if (oldEquip) {
       oldEquip.owner_id = null
+      held = oldEquip.id
     }
+
 
     let newEquip = this.props.party.equipment.find(item => item.id === parseInt(this.state.heldEquipment))
 
@@ -57,7 +76,7 @@ class Party extends React.Component {
     }
 
     this.setState({
-      heldEquipment: ""
+      heldEquipment: held
     })
 
     //send info to DB
@@ -75,8 +94,42 @@ class Party extends React.Component {
       return this.props.party.equipment.map(e => {
         let equip = this.props.party.equipmentAll.find(item => item.id === e.equipment_id)
         let user = this.props.party.members.find(member => member.id === e.owner_id)
-        return <div onClick={this.pickUpItem} id={`${e.id}equip`} className="party-equipment-display">{equip.name} equipped to {user ? user.name : "no one"}</div>
+        if (!user && parseInt(this.state.heldEquipment) !== e.id)  {
+          return <div onClick={this.pickUpItem} id={`${e.id}equip`} className={`party-equipment-display ${this.slugify(equip.name)}`}></div>
+        }
       })
+    }
+  }
+
+  slugify = (string) => {
+    return string.toString().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '')
+  }
+
+  movingEquipment = () => {
+    if (this.state.heldEquipment) {
+      let item = this.props.party.equipment.find(e => e.id === parseInt(this.state.heldEquipment))
+      let equip = this.props.party.equipmentAll.find(e => e.id === item.equipment_id)
+      return <div className="party-equipment-display">Moving: {equip.name}</div>
+    }
+  }
+
+  setDownEquipment = (e) => {
+    if (this.state.heldEquipment && e.target.id === "inventory") {
+
+      let newEquip = {...this.props.party.equipment.find(item => item.id === parseInt(this.state.heldEquipment))}
+      newEquip.id = 0
+      newEquip.update = true
+
+      this.setState({
+        heldEquipment: ""
+      })
+
+      PartyAdapter.updateParty(this.props.party.id, {item: newEquip, gold: this.props.party.gold})
     }
   }
 
@@ -106,13 +159,13 @@ class Party extends React.Component {
   }
 
   renderButton = () => {
-    const Button = withRouter(({ history }) => (<button className="store-link" onClick={() => { history.push('/store') }}>Store</button>))
-    return <Button />
+    return <button className="store-link" onClick={() => { this.props.history.push('/store') }}>Store</button>
   }
 
   logout = () => {
     localStorage.removeItem('jwt')
     this.props.logOut()
+    this.props.history.push('/home')
   }
 
   render() {
@@ -137,7 +190,10 @@ class Party extends React.Component {
                       <MapDisplay />
 
                       <div id="party-members">{this.mapMembers()}</div>
-                      <div className="inventory">{this.mapEquipment()}</div>
+                      <div id="inventory" onClick={this.setDownEquipment}>
+                        {this.mapEquipment()}
+                        {this.movingEquipment()}
+                      </div>
                       <div id="gold-display">
                         <div id="gold-coin"></div>
                         <p>{this.props.party.gold}</p>
@@ -185,4 +241,4 @@ class Party extends React.Component {
    }, dispatch)
  }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Party)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Party))

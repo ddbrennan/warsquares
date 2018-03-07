@@ -16,7 +16,7 @@ class MapDisplay extends React.Component {
   listMaps = () => {
 
     if (this.props.maps) {
-      return this.props.maps.map(m => <div><MapItem map={m.map} info={m.info} /></div>)
+      return this.props.maps.map(m => <div className="map-item"><MapItem map={m.map} info={m.info} /></div>)
     }
   }
   // Active Map

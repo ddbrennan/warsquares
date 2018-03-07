@@ -10,7 +10,8 @@ import { Link } from 'react-router-dom'
 class Login extends React.Component {
   state = {
     username: "",
-    password: ""
+    password: "",
+    error: ""
   }
 
   logIn = (e) => {
@@ -23,6 +24,8 @@ class Login extends React.Component {
         if (!user.error) {
           this.props.logIn(user)
           localStorage.setItem('jwt', user.jwt)
+        } else {
+          this.setState({ error: user.error})
         }
       })
   }
@@ -36,31 +39,24 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div>
-        {!this.props.auth.isLoggedIn ?
-          <div>
-            <Link to="/signup">Sign Up</Link>
-
-            <form onSubmit={ this.logIn }>
-              <input
-                type="text"
-                placeholder="Username"
-                value={this.state.username}
-                onChange={this.handleFormChange}
-                name="username">
-              </input>
-              <input
-                type="password"
-                placeholder="Password"
-                value={this.state.password}
-                onChange={this.handleFormChange}
-                name="password"></input>
-              <input type="submit" value="Log in"></input>
-            </form>
-          </div>
-        :
-          <Redirect to="/party"/>
-        }
+      <div className="auth-form">
+        <h1 className="tiny-headline">Sign In</h1>
+        <form onSubmit={ this.logIn }>
+          <input
+            type="text"
+            placeholder="Username"
+            value={this.state.username}
+            onChange={this.handleFormChange}
+            name="username">
+          </input>
+          <input
+            type="password"
+            placeholder="Password"
+            value={this.state.password}
+            onChange={this.handleFormChange}
+            name="password"></input>
+          <input className="submit-button" type="submit" value="Log in"></input>
+        </form>
       </div>
     )
   }
