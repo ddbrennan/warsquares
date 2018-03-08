@@ -35,24 +35,29 @@
 
 
 .auth-sign-in {
-  background-color: #d6ae8b;
+  background-color: #CCC;
+  border-radius: 10px;
   width: 20%;
   margin: 5% 1% 0% 1%;
   font-size: 1.5em;
-  border: solid 5px black;
   padding: 1%;
   float: left;
+  box-shadow: 3px 3px 5px #000;
+  border: solid 5px rgba(0,0,0,0)
 }
 
 .auth-sign-up {
-  background-color: #d6ae8b;
+  background-color: #CCC;
+
+  border-radius: 10px;
   width: 20%;
   margin: 5% 1% 0% 1%;
   font-size: 1.5em;
-  border: solid 5px black;
   padding: 1%;
   float: right;
   display: inline-block;
+  box-shadow: 3px 3px 5px #000;
+  border: solid 5px rgba(0,0,0,0)
 }
 
 #auth-buttons {
@@ -71,13 +76,13 @@
 
 
 .auth-sign-in:hover {
-  background-color: #663300;
+  background-color: #330000;
   color: white;
   border: solid 5px white;
 }
 
 .auth-sign-up:hover {
-  background-color: #663300;
+  background-color: #330000;
   color: white;
   border: solid 5px white;
 }
@@ -99,12 +104,13 @@
 }
 
 .auth-form .submit-button {
-  background-color: #d6ae8b;
-  border: solid 3px black;
+  background-color: #CCC;
+  border: solid 3px rgba(0,0,0,0);
+  border-radius: 5px;
 }
 
 .auth-form .submit-button:hover {
-  background-color: #663300;
+  background-color: #330000;
   color: white;
   border: solid 3px white;
 
