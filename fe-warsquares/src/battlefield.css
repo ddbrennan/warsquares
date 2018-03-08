@@ -104,11 +104,17 @@
 .recruit-link {
   width: 80%;
   margin: 2% auto;
-  border: solid 2px black;
   text-align: center;
   padding: 1%;
+  background-color: #330000;
+  transition: all .5s ease;
+  color: white;
+  cursor: pointer;
+}
 
-
+.recruit-link:hover {
+  width: 98%;
+  background-color: black;
 }
 
 #map-complete {

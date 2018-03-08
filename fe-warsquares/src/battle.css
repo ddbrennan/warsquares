@@ -99,6 +99,7 @@
   background-color: #330000;
   color: white;
   padding: 1%;
+  margin-bottom: 2%;
   white-space: nowrap;
   overflow: scroll;
 }
@@ -112,36 +113,39 @@
 .health-bar {
   float: left;
   display: block;
-  width: 45%;
+  width: 50%;
+  font-size: 1.4em;
+
 }
 
 .heart {
   float: left;
   display: block;
   background-image: url('./images/heart.png');
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   background-size: 100%;
   background-repeat: no-repeat;
-  margin-right: .5%;
+  margin-right: 5%;
 }
 
 .mana-bar {
-  float: left;
+  float: right;
   display: block;
   width: 45%;
   margin-left: 5%;
+  font-size: 1.4em;
 }
 
 .mana {
   float: left;
   display: block;
   background-image: url('./images/mana.png');
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   background-size: 100%;
   background-repeat: no-repeat;
-  margin-right: 1%;
+  margin-right: 5%;
 }
 
 .battle-char {
@@ -170,7 +174,7 @@
 }
 
 .field-world {
-  background: linear-gradient(-15deg, #999966, #cccc99);
+  background: linear-gradient(-15deg, #FFCC66, #cccc99);
 }
 
 .mountain-world {
