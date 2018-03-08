@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { selectSquare } from '../actions'
 
+let elevation;
+
 class GridMap extends React.Component {
   state = {
     width: Math.sqrt(this.props.map.info.visited.length)
@@ -25,6 +27,7 @@ class GridMap extends React.Component {
     }
     return arr
   }
+
 
   componentDidMount = () => {
     window.addEventListener("keydown", this.handleKeyPress)

@@ -8,6 +8,8 @@ import Encounter from './Encounter'
 import Character from './Character'
 import { stopQuesting, resetMap } from '../actions'
 import PartyAdapter from "../api/PartyAdapter"
+import { withRouter } from "react-router-dom"
+
 
 
 class Battlefield extends React.Component {
@@ -29,19 +31,24 @@ class Battlefield extends React.Component {
       .then(this.props.resetMap)
   }
 
+  renderButton = () => {
+    return <button className="bf-party-link" onClick={() => { this.props.history.push('/party') }}>Party</button>
+  }
+
   render() {
     return (
       <div id="battlefield">
         { this.props.questing ?
           <div>
-            <div>Battlefield</div>
-            <Link to="/party">Party</Link>
-
-            <h2>{this.props.map.info.moves}</h2>
+            {this.renderButton()}
+            <div className="move-counter">
+              <p>Moves Taken:</p>
+              <h2>{this.props.map.info.moves}</h2>
+            </div>
           { this.props.encounter && <Encounter />}
           <GridMap map={this.props.map} />
           {this.props.map.info.complete ?
-            <div>
+            <div id="map-complete">
               <div>Congratulations! You Captured the Castle</div>
               <button onClick={this.resetMap}>Reset the Map?</button>
             </div>
@@ -89,4 +96,4 @@ class Battlefield extends React.Component {
    }
  }
 
-export default connect(mapStateToProps, { stopQuesting, resetMap })(Battlefield)
+export default withRouter(connect(mapStateToProps, { stopQuesting, resetMap })(Battlefield))

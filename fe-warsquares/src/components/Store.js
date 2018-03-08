@@ -16,7 +16,7 @@ class Store extends React.Component {
   }
 
   renderButton = () => {
-    return <button className="party-link" onClick={() => { this.props.history.push('/store') }}>Store</button>
+    return <button className="party-link" onClick={() => { this.props.history.push('/party') }}>Party</button>
   }
 
   render() {

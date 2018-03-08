@@ -131,12 +131,12 @@ class Encounter extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id="encounter-popup">
         <h2>ENCOUNTER!</h2>
-        {this.props.enemyArr.length ? <p>It's a {this.props.enemyArr[0].role}{!!(this.props.enemyArr.length - 1) ? ` and ${this.props.enemyArr.length - 1} allies` : null}!</p> : null}
-          {this.isntCastle() ? <p onClick={this.bribe}>Bribe for {this.calculateBribe()}</p> : null }
-          <Link to="/battle">Battle Them!</Link>
-          {this.props.tabard && this.isntCastle() ? <p onClick={this.attemptRecruit}>Attempt to Recruit</p>: null}
+        {this.props.enemyArr.length ? <p>It's a {this.props.enemyArr[0].role}{!!(this.props.enemyArr.length - 1) ? ` and ${this.props.enemyArr.length - 1} their companion(s)` : null}!</p> : null}
+          {this.isntCastle() ? <div className="bribe-link" onClick={this.bribe}>Bribe for {this.calculateBribe()}</div> : null }
+          <div className="battle-link"><Link to="/battle">Battle Them!</Link></div>
+          {this.props.tabard && this.isntCastle() ? <div className="recruit-link" onClick={this.attemptRecruit}>Attempt to Recruit</div>: null}
           {this.state.recruitFailed ? <Redirect to="/battle"></Redirect> : null}
       </div>
     )

@@ -7,6 +7,7 @@ import { resolveEncounter, damageEnemy } from '../actions'
 import PartyAdapter from '../api/PartyAdapter'
 import { Redirect } from 'react-router'
 import { Link } from 'react-router-dom'
+import { withRouter } from "react-router-dom"
 
 
 class Battle extends React.Component {
@@ -251,7 +252,7 @@ class Battle extends React.Component {
   }
 
   displayDiceRoll = () => {
-    return this.state.rolls.map((r,i) => <label>{r}<input type="checkbox" name={i} onChange={this.lockDie}/></label>)
+    return this.state.rolls.map((r,i) => <label className="dice-lock"><div className={this.state.locked[i] ? "locked" : "unlocked"}></div><div className={`roll ${r}-dice`}></div><input className="die-check" type="checkbox" name={i} onChange={this.lockDie}/></label>)
   }
 
   lockDie = (e) => {
@@ -273,6 +274,14 @@ class Battle extends React.Component {
     let visited = this.props.map.info.visited
     let moveCount = this.props.map.info.moves + 1
     let complete = false
+
+    let result
+    if (this.pcAlive()) {
+      result = "won"
+    } else {
+      result = "lost"
+    }
+    this.setState({ result })
 
     if (this.state.combatants.find(c => (!!c.party_id && c.health > 0))) {
       recruit = this.props.enemies.shift()
@@ -387,13 +396,13 @@ class Battle extends React.Component {
   renderSpell = () => {
     switch(this.state.combatants[this.state.currentTurn].role) {
       case 'Knight':
-        return <div><button onClick={this.knightSpell}>Whirlwind - 3 Mana</button></div>
+        return <div className="magic-spell"><button onClick={this.knightSpell}>Whirlwind - 3 Mana</button></div>
       case 'Cleric':
-        return <div><button onClick={this.clericSpell}>Minor Heal - 1 Mana</button></div>
+        return <div className="magic-spell"><button onClick={this.clericSpell}>Minor Heal - 1 Mana</button></div>
       case 'Rogue':
-        return <div><button onClick={this.rogueSpell}>Smoke Bomb - 4 Mana</button></div>
+        return <div className="magic-spell"><button onClick={this.rogueSpell}>Smoke Bomb - 4 Mana</button></div>
       case 'Mage':
-        return <div><button onClick={this.mageSpell}>Fireball - All Mana</button></div>
+        return <div className="magic-spell"><button onClick={this.mageSpell}>Fireball - All Mana</button></div>
     }
   }
 
@@ -410,56 +419,94 @@ class Battle extends React.Component {
     })
   }
 
-  //should redirect if there is no enemy array
+  getBackdrop = () => {
+    let width = Math.sqrt(this.props.map.map.layout.length/2)
+    let arrLoc = this.props.selectedSquare[0] + this.props.selectedSquare[1]*width
+
+    switch (this.props.map.map.layout[arrLoc*2]) {
+      case "F":
+        return "field-world"
+      case "M":
+        return "mountain-world"
+      case "W":
+        return "forest-world"
+      case "S":
+        return "swamp-world"
+      case "C":
+        return "castle-world"
+    }
+  }
+
   render() {
     return (
-          <div className="battle-container">
+          <div>
+            {this.props.allies
+            ?
+          <div className={`battle-container ${this.getBackdrop()}`}>
             {this.state.rolling || this.state.damage || this.state.spellcasting || this.props.questing ?
               null
               :
-              <button onClick={this.takeTurns}>Start Battle</button>
+              <button id="start-button" onClick={this.takeTurns}>Start Battle</button>
              }
-
+            <div className="top-filler-left"> </div>
+            <div id="ally-label">ALLIES</div>
             <div className="allies-container">
               {this.renderParty()}
             </div>
+            <div id="enemy-label">ENEMIES</div>
             <div className="enemies-container">
               {this.renderEnemies()}
             </div>
+            <div className="top-filler-right"> </div>
+
 
             {this.state.rolling && this.state.rollCount < 3 ?
-              <div>
-                <button onClick={this.setDiceRoll}>Roll</button>
+              <div id="dice-tray">
+                <button id="roll-button" onClick={this.setDiceRoll}>Roll</button>
                 {this.displayDiceRoll()}
               </div>
               :
               null
             }
 
-            {!!this.state.damage ?
-              <div>
-                <div>Click people to damage them.</div>
-                <h3>Remaining Damage: {this.state.damage}</h3>
+            {!!this.state.damage && !this.props.questing ?
+              <div id="damage-tray">
+                <h2>Click An Enemy To Damage Them!</h2>
+                <h3>Remaining Damage:</h3>
+                <h1>{this.state.damage}</h1>
               </div>
               :
               null
             }
 
             {this.state.spellcasting ?
-              <div>
+              <div id="spell-tray">
+                <h2>Cast Your Class Spell!</h2>
                 {this.renderSpell()}
-                <button onClick={this.endSpellcasting}>Done</button>
+                <button className="done-spellcasting" onClick={this.endSpellcasting}>Done</button>
               </div>
               :
               null
             }
 
             {this.props.questing ?
-              <Link to="/battlefield">Back to the Map</Link>
+              <button id="battlefield-link-button" onClick={() => this.props.history.push('/battlefield')}>Back to the Map</button>
               :
               null
             }
-
+            {this.state.result === "won" ?
+              <div className="result">You Won! A New Member Has Joined Your Team.</div>
+              :
+              null
+            }
+            {this.state.result === "lost" ?
+              <div className="result">You Lost. You'll Have To Try Again!</div>
+              :
+              null
+            }
+          </div>
+          : <Redirect to='/party' />
+          }
           </div>
     )
   }
@@ -499,4 +546,4 @@ class Battle extends React.Component {
    }, dispatch)
  }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Battle)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Battle))
